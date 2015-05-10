@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 2.6)
+
+project(turing_machine)
+
+find_package(FLTK REQUIRED)
+find_package(OpenGL REQUIRED)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+add_subdirectory(src)
