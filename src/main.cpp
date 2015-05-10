@@ -6,6 +6,9 @@
 #include <FL/Fl_Button.H>
 #include <sstream>
 #include <cmath>
+#include <iostream>
+
+#include "machine.hpp"
 
 Fl_Value_Input* a, *b, *c;
 Fl_Multiline_Output* out;
@@ -35,29 +38,34 @@ void oblicz_cb(Fl_Widget*, void*) {
 
 int main()
 {
-    Fl_Window w(600, 400, "Solver");
+    // Fl_Window w(600, 400, "Solver");
 
-    Fl_Box title(10, 10, 580, 80, "ax^2 + bx + c = 0");
-    title.box(FL_DOWN_BOX);
-    title.labelsize(36);
-    title.labelfont(FL_BOLD + FL_ITALIC);
+    // Fl_Box title(10, 10, 580, 80, "ax^2 + bx + c = 0");
+    // title.box(FL_DOWN_BOX);
+    // title.labelsize(36);
+    // title.labelfont(FL_BOLD + FL_ITALIC);
 
-    a = new Fl_Value_Input(100, 120, 100, 20, "a = ");
-    a->value(1);
+    // a = new Fl_Value_Input(100, 120, 100, 20, "a = ");
+    // a->value(1);
 
-    b = new Fl_Value_Input (250, 120, 100, 20, "b = ");
-    b->value(0);
+    // b = new Fl_Value_Input (250, 120, 100, 20, "b = ");
+    // b->value(0);
 
-    c = new Fl_Value_Input (400, 120, 100, 20, "c = ");
-    c->value(0);
+    // c = new Fl_Value_Input (400, 120, 100, 20, "c = ");
+    // c->value(0);
 
-    out = new Fl_Multiline_Output(100, 170, 250, 200, "Wynik:");
+    // out = new Fl_Multiline_Output(100, 170, 250, 200, "Wynik:");
 
-    Fl_Button oblicz(400, 240, 100, 30, "Oblicz");
-    oblicz.callback(oblicz_cb);
+    // Fl_Button oblicz(400, 240, 100, 30, "Oblicz");
+    // oblicz.callback(oblicz_cb);
 
-    w.end();
-    w.show();
+    // w.end();
+    // w.show();
+
+    machine::Machine machine;
+    machine.parse(std::cin);
+
+    std::cerr << machine.run() << std::endl;
 
     return Fl::run();
 }
