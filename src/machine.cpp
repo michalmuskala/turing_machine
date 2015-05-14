@@ -2,10 +2,11 @@
 
 #include <sstream>
 #include <algorithm>
+#include <string>
 
 namespace machine {
 
-const Move Move::empty = {0};
+const Move Move::empty = {empty_sym, error_state, move_right};
 
 bool Move::operator==(const Move& other) const {
     return sym == other.sym && state == other.state && move == other.move;
@@ -38,6 +39,10 @@ const Move& StateMap::get(const state_type& state, const sym_type& sym) const {
         return it->second.get(sym);
     }
 }
+
+static Machine::callback_type noop = [](const state_type&, const sym_type) {};
+
+Machine::Machine(): state_map_(), callback_(noop) {}
 
 bool Machine::parse(std::istream& in) {
     std::string line;
@@ -84,12 +89,41 @@ bool Machine::parse(std::istream& in) {
     return true;
 }
 
-void Machine::handle(const state_type& state, const sym_type sym) {
-    const Move& move = state_map_.get(state, sym);
+void Machine::register_callback(callback_type& callback) {
+    callback_ = callback;
+}
+
+class Runner {
+  public:
+    typedef std::deque<sym_type> strip_type;
+    typedef size_t size_type;
+
+    template <class T>
+    Runner(const T& strip, const StateMap& state_map):
+        current_(0), state_map_(state_map), state_(start_state) {
+        std::copy(strip.begin(), strip.end(), strip_.begin());
+        if (strip_.empty()) {
+            strip_.push_back(empty_sym);
+        }
+    }
+
+    bool tick();
+    inline const state_type& state() const { return state_; }
+    inline sym_type sym() const { return strip_[current_]; }
+
+  private:
+    size_type current_;
+    const StateMap& state_map_;
+    state_type state_;
+    strip_type strip_;
+};
+
+bool Runner::tick() {
+    const Move& move = state_map_.get(state_, sym());
 
     if (move == Move::empty) {
         state_ = error_state;
-        return;
+        return false;
     }
 
     strip_[current_] = move.sym;
@@ -104,24 +138,24 @@ void Machine::handle(const state_type& state, const sym_type sym) {
         }
         break;
     case move_right:
-        if (current_ == strip_.size()) {
+        if (current_ == strip_.size() - 1) {
             strip_.push_back(empty_sym);
             ++current_;
         } else {
             ++current_;
         }
     }
+
+    return state_ != halt_state && state_ != error_state;
 }
 
-const state_type Machine::run() {
-    std::cerr << "START " << strip_[current_] << std::endl;
-    handle(start_state, strip_[current_]);
+const state_type Machine::run(const std::string& strip) {
+    Runner runner(strip, state_map_);
 
-    while (state_ != halt_state && state_ != error_state) {
-        std::cerr << state_ << " " << strip_[current_] << std::endl;
-        handle(state_, strip_[current_]);
+    while (runner.tick()) {
+        callback_(runner.state(), runner.sym());
     }
 
-    return state_;
+    return runner.state();
 }
 }

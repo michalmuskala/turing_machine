@@ -1,7 +1,7 @@
 #include <deque>
-#include <string>
 #include <map>
 #include <iostream>
+#include <functional>
 
 namespace machine {
 
@@ -46,33 +46,16 @@ class StateMap {
 
 class Machine {
   public:
-    typedef std::deque<sym_type> strip_type;
-    typedef size_t size_type;
+    typedef std::function<void(const state_type&, const sym_type)> callback_type;
 
-    template <typename T>
-    explicit Machine(const T& strip, const size_type current = 0):
-        current_(current) {
-        std::copy(strip.begin(), strip.end(), strip_.begin());
-
-        if (strip_.empty()) {
-            strip_.push_back(empty_sym);
-        }
-    }
-
-    Machine(): current_(0) {
-        strip_.push_back(empty_sym);
-    }
-
+    Machine();
     bool parse(std::istream& in);
-    const state_type run();
+    const state_type run(const std::string& strip = "");
+    void register_callback(callback_type& callback);
 
   private:
-    strip_type strip_;
-    size_type current_;
-    state_type state_;
     StateMap state_map_;
-
-    void handle(const state_type& state, const sym_type sym);
+    callback_type& callback_;
 };
 
 }

@@ -38,6 +38,7 @@ void oblicz_cb(Fl_Widget*, void*) {
 
 int main()
 {
+    using namespace machine;
     // Fl_Window w(600, 400, "Solver");
 
     // Fl_Box title(10, 10, 580, 80, "ax^2 + bx + c = 0");
@@ -62,8 +63,14 @@ int main()
     // w.end();
     // w.show();
 
-    machine::Machine machine;
+    Machine machine;
     machine.parse(std::cin);
+
+    Machine::callback_type callback = [](const state_type& state, const sym_type sym) {
+        std::cerr << state << " " << sym << std::endl;
+    };
+
+    machine.register_callback(callback);
 
     std::cerr << machine.run() << std::endl;
 
