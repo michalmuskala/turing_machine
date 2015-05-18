@@ -4,8 +4,6 @@
 #include <algorithm>
 #include <string>
 
-namespace machine {
-
 const Move Move::empty = {empty_sym, error_state, move_right};
 
 bool Move::operator==(const Move& other) const {
@@ -152,10 +150,11 @@ bool Runner::tick() {
 const state_type Machine::run(const std::string& strip) {
     Runner runner(strip, state_map_);
 
+    callback_(runner.state(), runner.sym());
+
     while (runner.tick()) {
         callback_(runner.state(), runner.sym());
     }
 
     return runner.state();
-}
 }

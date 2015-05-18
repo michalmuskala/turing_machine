@@ -3,8 +3,6 @@
 #include <iostream>
 #include <functional>
 
-namespace machine {
-
 typedef char sym_type;
 typedef std::string state_type;
 typedef enum {move_left, move_right} move_type;
@@ -57,5 +55,3 @@ class Machine {
     StateMap state_map_;
     callback_type& callback_;
 };
-
-}
