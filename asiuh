@@ -1,0 +1,53 @@
+[33mcommit a4dd02fbd4b1c817eca01efd575f3834b26b50a9[m
+Author: John Doe <johndoe@example.com>
+Date:   Wed Jun 10 16:58:43 2015 +0200
+
+    machine.cpp funkcja SymMap::put, kilka literek
+
+[33mcommit 146eac6fe1c4ea8f0b382503603d495a324c1491[m
+Author: John Doe <johndoe@example.com>
+Date:   Wed Jun 10 16:54:28 2015 +0200
+
+    informacja o zmianach
+
+[33mcommit c50df3641c78972ac3fdf017456e0aeb4fd0b46b[m
+Author: John Doe <johndoe@example.com>
+Date:   Wed Jun 10 16:54:00 2015 +0200
+
+    informacja o zmianach
+
+[33mcommit 7ee18992ef7ceabd999f14faa781b808f16de66e[m
+Author: Michal Muskala <michal@muskala.eu>
+Date:   Mon May 18 09:17:50 2015 +0200
+
+    Cleanup
+
+[33mcommit d60e7774eaacb45fbaa66b6c70c04d7ae82a979a[m
+Author: Michał Muskała <michal@muskala.eu>
+Date:   Mon May 18 09:05:14 2015 +0200
+
+    Settings for visual studio
+
+[33mcommit 647d797bc8d871adf3712c4977a861ac05657222[m
+Author: Michal Muskala <michal@muskala.eu>
+Date:   Thu May 14 09:20:45 2015 +0200
+
+    Improve machine implementation
+
+[33mcommit 006b5bb24b7ef08692aa075e4bf74824ae88a811[m
+Author: Michal Muskala <michal@muskala.eu>
+Date:   Mon May 11 18:38:11 2015 +0200
+
+    Add readme
+
+[33mcommit 39115986bde3ca8ae019d660823ff9eee14c51bb[m
+Author: Michal Muskala <michal@muskala.eu>
+Date:   Sun May 10 21:18:05 2015 +0200
+
+    Basic working Turing Machine
+
+[33mcommit d3478d33d502a8a02c5b9a54ce9364d1d1d2f381[m
+Author: Michal Muskala <michal@muskala.eu>
+Date:   Sun May 10 12:27:39 2015 +0200
+
+    Basic project, copy from lab
