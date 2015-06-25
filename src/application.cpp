@@ -1,5 +1,7 @@
 #include "application.hpp"
 #include <iostream>
+#include "statesTable.hpp"
+#include <string>
 
 Fl_Menu_Item menuitems[] =
 {
@@ -21,8 +23,7 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
 	menu_Bar = new Fl_Menu_Bar( 0, 0, w_, 30);
 	menu_Bar->copy( menuitems );
 
-
-    end();
+	end();
     show();
 }
 Application::~Application( void)
@@ -36,14 +37,32 @@ void Application::new_machine( Fl_Widget*, void* )
 }
 void Application::open_machine( Fl_Widget*, void* )
 {
+	Fl_File_Chooser *fc;
+	fc = new Fl_File_Chooser( "c:\\", "*.turm",
+	Fl_File_Chooser::SINGLE, "Otwieranie" );
+	fc->preview( 0 );
+	fc->ok_label( "Otwórz" );
+	fc->previewButton->hide();
+	fc->newButton->hide();
+	fc->callback( open_tur );
+	fc->show();
 }
+void Application::open_tur( Fl_File_Chooser* o, void *v )
+{
+	std::string pathname;
+	pathname=o->value();
+if( !o->visible() )
+	std::cout<<pathname;
+}
+
 void Application::save_machine( Fl_Widget*, void* )
 {
+
 }
 void Application::show_information( Fl_Widget*, void* )
 {
 }
-void Application::exit( Fl_Widget*, void* )
+void Application::exit( Fl_Widget* e )
 {
+	((Fl_Widget*) e)->parent()->hide();
 }
-

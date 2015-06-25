@@ -3,6 +3,12 @@
 
 #include "machine.hpp"
 #include "application.hpp"
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Shared_Image.H>
+#include <FL/Fl_JPEG_Image.H>
+#include <FL/Fl_Box.H>
+#include "statesTable.hpp"
+#include <iostream>
 
 int main()
 {
@@ -18,6 +24,7 @@ int main()
     // std::cerr << machine.run() << std::endl;
 
     Application application(600, 500);
-
     return Fl::run();
+
+
 }

@@ -1,5 +1,8 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Menu_Bar.H>
+#include <FL/Fl_JPEG_Image.H>
+#include <FL/Fl_File_Chooser.H>
+
 
 class Application: public Fl_Window{
 public:
@@ -11,11 +14,12 @@ public:
 	static void open_machine( Fl_Widget*, void* );
 	static void save_machine( Fl_Widget*, void* );
 	static void show_information( Fl_Widget*, void* );
-	static void exit( Fl_Widget*, void* );
+	static void exit( Fl_Widget* );
+
+	static void open_tur( Fl_File_Chooser* o, void *v );
 
 private:
     int w_, h_;
-
 
 	Fl_Menu_Bar *menu_Bar;
 };
