@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pedantic -Wall -Wextra -Werror -Wshadow -Wcast-qual -Wlogical-op -Wredundant-decls")
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pedantic -Wall -Wextra -Werror -Wshadow -Wcast-qual -Wlogical-op -Wredundant-decls")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 add_subdirectory(src)

@@ -21,32 +21,32 @@ Fl_Menu_Item menuitems[] =
 
 Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
                                         w_(w), h_(h) {
-	menu_Bar = new Fl_Menu_Bar( 0, 0, w_, 30);
+  menu_Bar = MenuBarPtr(new Fl_Menu_Bar( 0, 0, w_, 30));
 	menu_Bar->copy( menuitems );
 	
 
-	tape = new Fl_Box(0, 60, w_, 30, "TAPE");
+	tape = BoxPtr(new Fl_Box(0, 60, w_, 30, "TAPE"));
 	tape->box(FL_UP_BOX);
 
-	service = new Fl_Box(-1,90,w_,50,"Start, Add, etc.");
+	service = BoxPtr(new Fl_Box(-1,90,w_,50,"Start, Add, etc."));
 	service->box(FL_UP_BOX);
 
-	add = new Fl_Button(5, 100, 50, 30, "Dodaj");
+	add = ButtonPtr(new Fl_Button(5, 100, 50, 30, "Dodaj"));
 	add->callback(add_button);
 
-	start = new Fl_Button(75, 100, 50, 30, "Start");
+	start = ButtonPtr(new Fl_Button(75, 100, 50, 30, "Start"));
 	start->callback(open_machine);
 	
-	box = new Fl_Box(-1,29,w_,471,"StatesTable");
-	state_beg = new Fl_Box(27,170, 120,30,"Stan poczatkowy");
+	box = BoxPtr(new Fl_Box(-1,29,w_,471,"StatesTable"));
+	state_beg = BoxPtr(new Fl_Box(27,170, 120,30,"Stan poczatkowy"));
 	state_beg->box(FL_BORDER_BOX);
-	read_sym = new Fl_Box(146,170, 140,30,"Przeczytany symbol");
+	read_sym = BoxPtr(new Fl_Box(146,170, 140,30,"Przeczytany symbol"));
 	read_sym->box(FL_BORDER_BOX);
-	write_sym = new Fl_Box(285,170, 120,30,"Wpisany symbol");
+	write_sym = BoxPtr(new Fl_Box(285,170, 120,30,"Wpisany symbol"));
 	write_sym->box(FL_BORDER_BOX);
-	dir = new Fl_Box(403,170, 70,30,"Kierunek");
+	dir = BoxPtr(new Fl_Box(403,170, 70,30,"Kierunek"));
 	dir->box(FL_BORDER_BOX);
-	state_end = new Fl_Box(472,170, 100,30,"Stan koncowy");
+	state_end = BoxPtr(new Fl_Box(472,170, 100,30,"Stan koncowy"));
 	state_end->box(FL_BORDER_BOX);
 
 	
@@ -55,19 +55,6 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
 }
 Application::~Application( void)
 {
-	delete menu_Bar;
-	delete box;
-	delete tape;
-
-	delete service;
-	delete add;
-	delete start;
-
-	delete state_beg;
-	delete read_sym;
-	delete write_sym;
-	delete dir;
-	delete state_end;
 }
 
 
