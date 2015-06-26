@@ -4,43 +4,9 @@
 #include <algorithm>
 #include <string>
 
-const Move Move::empty = {empty_sym, error_state, move_right};
-
-bool Move::operator==(const Move& other) const {
-    return sym == other.sym && state == other.state && move == other.move;
-}
-
-void SymMap::put(const sym_type& sym, const Move& move) {
-    map_[sym] = move;
-}
-
-const Move& SymMap::get(const sym_type& sym) const {
-    map_type::const_iterator it = map_.find(sym);
-
-    if (it == map_.end()) {
-        return Move::empty;
-    } else {
-        return it->second;
-    }
-}
-
-void StateMap::put(const state_type& state, const sym_type& sym, const Move& move) {
-    map_[state].put(sym, move);
-}
-
-const Move& StateMap::get(const state_type& state, const sym_type& sym) const {
-    map_type::const_iterator it = map_.find(state);
-
-    if (it == map_.end()) {
-        return Move::empty;
-    } else {
-        return it->second.get(sym);
-    }
-}
-
 static Machine::callback_type noop = [](const state_type&, const sym_type) {};
 
-Machine::Machine(): state_map_(), callback_(noop) {}
+Machine::Machine(const StateMap& state_map): state_map_(state_map), callback_(noop) {}
 
 bool Machine::parse(std::istream& in) {
     std::string line;
