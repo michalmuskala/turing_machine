@@ -21,14 +21,14 @@ Fl_Menu_Item menuitems[] =
 
 Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
                                         w_(w), h_(h) {
-  menu_Bar = MenuBarPtr(new Fl_Menu_Bar( 0, 0, w_, 30));
+  menu_Bar = MenuBarPtr(new Fl_Menu_Bar( -1, 0, w_+3, 30));
 	menu_Bar->copy( menuitems );
 	
 
-	tape = BoxPtr(new Fl_Box(0, 60, w_, 30, "TAPE"));
+	tape = BoxPtr(new Fl_Box(-1, 60+1, w_+3, 30, "TAPE"));
 	tape->box(FL_UP_BOX);
 
-	service = BoxPtr(new Fl_Box(-1,90,w_,50,"Start, Add, etc."));
+	service = BoxPtr(new Fl_Box(-1,90,w_+3,50,"Start, Add, etc."));
 	service->box(FL_UP_BOX);
 
 	add = ButtonPtr(new Fl_Button(5, 100, 50, 30, "Dodaj"));
@@ -98,25 +98,67 @@ void Application::exit( Fl_Widget* e )
 
 void Application::add_button(Fl_Widget*, void*)
 {
+	Fl_Window window(300, 400, "Dodaj rozkaz");
+	
+	//inputBegState = new Fl_Input(110, 30, 180, 17, "Stan poczatkowy: ");
+	BoxPtr begText, rSymText, wSymText, dirText, endText;
+	
+	inputy::inputBegState = InputPtr(new Fl_Input(110, 30, 180, 17, "Stan poczatkowy: "));
+	inputy::inputBegState -> value("");
+	inputy::inputBegState->labelsize(11);
+	inputy::inputBegState->textsize(11);
 
-	Fl_Window window(250, 250, "Dodaj rozkaz");
-	Fl_Input *input;
-	input = new Fl_Input(60, 20, 150, 25, "Symbol: ");
-	input -> value("");
-	Fl_Box *symbolText = new Fl_Box(10,60,230,50,"Symbol, ktory bedzie wpisany\n na tasme.");
+	begText = BoxPtr(new Fl_Box(10,50,280,50,"Stan, w jakim maszyna sie znajduje przed \nrozpoczeciem pracy (np.: 'STAN1')."));
+	begText->labelsize(11);
+	
 
+	/*inputRSym = InputPtr(new Fl_Input(110, 100, 180, 17, "Czytany symbol:   "));
+	inputRSym -> value("");
+	inputRSym->labelsize(11);
+	inputRSym->textsize(11);
+	inputRSym->maximum_size(1);
 
-	input = new Fl_Input(70, 120, 150, 25, "Kierunek: ");
-	input -> value("");
-	Fl_Box *directionText = new Fl_Box(10,150,230,50,"Kierunek nastepnego ruchu glowicy.");
+	rSymText = BoxPtr(new Fl_Box(10,115,280,50,"Symbol, ktory bedzie przeczytany z tasmy (np.: '#')."));
+	rSymText->labelsize(11);
+
+	inputWSym = InputPtr(new Fl_Input(110, 165, 180, 17, "Zapisany symbol:  "));
+	inputWSym -> value("");
+	inputWSym->labelsize(11);
+	inputWSym->textsize(11);
+	inputWSym->maximum_size(1);
+
+	wSymText = BoxPtr(new Fl_Box(10,175,280,50,"Symbol, ktory bedzie zapisany do tasmy (np.: '1')."));
+	wSymText->labelsize(11);
+
+	inputDir = InputPtr(new Fl_Input(110, 230, 180, 17, "Kierunek:               "));
+	inputDir -> value("");
+	inputDir->labelsize(11);
+	inputDir->textsize(11);
+	inputDir->maximum_size(1);
+
+	dirText = BoxPtr(new Fl_Box(10,240,280,50,"Kierunek nastepnego ruchu glowicy (L lub P)."));
+	dirText->labelsize(11);
+
+	inputEndState = InputPtr(new Fl_Input(110, 295, 180, 17, "Stan koncowy:      "));
+	inputEndState -> value("");
+	inputEndState->labelsize(11);
+	inputEndState->textsize(11);
+
+	endText = BoxPtr(new Fl_Box(10,305,280,50,"Stan maszyny, w jakim sie znajdzie \npo wykonaniu rozkazu (np.: 'STAN2')."));
+	endText->labelsize(11);*/
+
 
 	Fl_Button *addOrder;
-	addOrder = new Fl_Button(180, 200, 50, 30, "Dodaj");
-	addOrder->callback(open_machine);
+	addOrder = new Fl_Button(230, 350, 50, 30, "Dodaj");
+	addOrder->callback(okej);
 
 	
 	window.end();
 	window.show();
 	Fl::run();
 
+}
+void Application::okej(Fl_Widget*, void* param)
+{
+	//std::cout<<Application::inputBegState->value(); do tego momentu jeszcze nie doszedlem
 }

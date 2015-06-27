@@ -1,6 +1,3 @@
-#ifndef TURING_MACHINE_STATES_TABLE
-#define TURING_MACHIND_STATES_TABLE
-
 #include <vector>
 #include <string>
 
@@ -17,5 +14,3 @@ private:
 	std::vector<char> write;
 	std::vector<char> direction;
 };
-
-#endif

@@ -12,6 +12,7 @@ public:
     typedef std::unique_ptr<Fl_Menu_Bar> MenuBarPtr;
     typedef std::unique_ptr<Fl_Box> BoxPtr;
     typedef std::unique_ptr<Fl_Button> ButtonPtr;
+	typedef std::unique_ptr<Fl_Input> InputPtr;
 
     Application(int w, int h);
 	~Application( void );
@@ -26,6 +27,8 @@ public:
 	static void open_tur( Fl_File_Chooser* o, void *v );
 	static void add_button(Fl_Widget*, void*);
 
+	static void okej(Fl_Widget*, void*);
+	//static Fl_Input *inputBegState;
 private:
     int w_, h_;
     MenuBarPtr menu_Bar;
@@ -41,4 +44,16 @@ private:
     BoxPtr write_sym;
     BoxPtr dir;
     BoxPtr state_end;
+	
+	
+};
+
+class inputy
+{
+public:
+	typedef std::unique_ptr<Fl_Input> InputPtr;
+	friend class Application;
+private:
+	static InputPtr  inputBegState;
+	//inputRSym, inputWSym, inputDir, inputEndState;
 };
