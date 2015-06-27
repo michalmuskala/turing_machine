@@ -38,15 +38,16 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
 	start->callback(open_machine);
 	
 	box = BoxPtr(new Fl_Box(-1,29,w_,471,"StatesTable"));
-	state_beg = BoxPtr(new Fl_Box(27,170, 120,30,"Stan poczatkowy"));
+	state_beg = BoxPtr(new Fl_Box(12,170, 125,35,"Stan poczatkowy"));
 	state_beg->box(FL_BORDER_BOX);
-	read_sym = BoxPtr(new Fl_Box(146,170, 140,30,"Przeczytany symbol"));
+
+	read_sym = BoxPtr(new Fl_Box(136,170, 145,35,"Przeczytany symbol"));
 	read_sym->box(FL_BORDER_BOX);
-	write_sym = BoxPtr(new Fl_Box(285,170, 120,30,"Wpisany symbol"));
+	write_sym = BoxPtr(new Fl_Box(280,170, 125,35,"Wpisany symbol"));
 	write_sym->box(FL_BORDER_BOX);
-	dir = BoxPtr(new Fl_Box(403,170, 70,30,"Kierunek"));
+	dir = BoxPtr(new Fl_Box(404,170, 75,35,"Kierunek"));
 	dir->box(FL_BORDER_BOX);
-	state_end = BoxPtr(new Fl_Box(472,170, 100,30,"Stan koncowy"));
+	state_end = BoxPtr(new Fl_Box(478,170, 105,35,"Stan koncowy"));
 	state_end->box(FL_BORDER_BOX);
 
 	
