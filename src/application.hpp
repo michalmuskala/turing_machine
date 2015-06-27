@@ -1,3 +1,6 @@
+#ifndef TURING_MACHINE_APPLICATION
+#define TURING_MACHINE_APPLICATION
+
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_File_Chooser.H>
@@ -57,3 +60,5 @@ private:
 	static InputPtr  inputBegState;
 	//inputRSym, inputWSym, inputDir, inputEndState;
 };
+
+#endif

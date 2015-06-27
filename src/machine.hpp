@@ -1,3 +1,6 @@
+#ifndef TURING_MACHINE_MACHINE
+#define TURING_MACHINE_MACHINE
+
 #include <deque>
 #include <map>
 #include <iostream>
@@ -55,3 +58,5 @@ class Machine {
     StateMap state_map_;
     callback_type& callback_;
 };
+
+#endif
