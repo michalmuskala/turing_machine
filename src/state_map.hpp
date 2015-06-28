@@ -28,8 +28,8 @@ class SymMap {
     typedef map_type::iterator iterator;
     typedef map_type::const_iterator const_iterator;
 
-    void put(const sym_type& sym, const Move& move);
-    const Move& get(const sym_type& sym) const;
+    void put(const sym_type sym, const Move& move);
+    const Move& get(const sym_type sym) const;
 
     inline const_iterator begin() const { return map_.begin(); }
     inline const_iterator end() const { return map_.end(); }
@@ -46,8 +46,9 @@ class StateMap {
     typedef map_type::iterator iterator;
     typedef map_type::const_iterator const_iterator;
 
-    void put(const state_type& state, const sym_type& sym, const Move& move);
-    const Move& get(const state_type& state, const sym_type& sym) const;
+    void put(const state_type& state1, const sym_type sym1, const sym_type sym2, const move_type move, const state_type& state2);
+    void put(const state_type& state, const sym_type sym, const Move& move);
+    const Move& get(const state_type& state, const sym_type sym) const;
 
     inline const_iterator begin() const { return map_.begin(); }
     inline const_iterator end() const { return map_.end(); }
