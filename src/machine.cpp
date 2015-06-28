@@ -6,7 +6,7 @@
 
 static Machine::callback_type noop = [](const state_type&, const sym_type) {};
 
-Machine::Machine(): state_map_(), callback_(noop) {}
+Machine::Machine(const StateMap& state_map): state_map_(state_map), callback_(noop) {}
 
 bool Machine::parse(std::istream& in) {
     std::string line;
