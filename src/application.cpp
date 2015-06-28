@@ -27,11 +27,10 @@ double wartosc = ((Fl_Slider* ) o)->value();
 }
 
 Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
-                                        w_(w), h_(h) {
+                                        w_(w), h_(h), state_map() {
 	menu_Bar = MenuBarPtr(new Fl_Menu_Bar( -1, 0, w_+3, 30));
 	menu_Bar->copy( menuitems );
-	
-	
+
 	tape = BoxPtr(new Fl_Box(-1, 60+1, w_+3, 30, "TAPE"));
 	tape->box(FL_UP_BOX);
 
@@ -69,9 +68,7 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
 	//table.addRow("STAN1", "#", "0", "L", "STAN2");
 	//table.addRow("STAN1", "#", "0", "L", "STAN2");
 
-
-//	Machine machine;
-	//Application::state_map =&machine;
+  popup = PopupPtr(new Popup(&state_map));
 	end();
     show();
 }
@@ -126,32 +123,32 @@ if( !o->visible() )
 
 void Application::send_order_Ffile(std::string order)
 {
-	std::string converter;
-	int whichField=0;
-	Move anotherMove;
-	state_type beg_State;
-	sym_type RSym;
+	// std::string converter;
+	// int whichField=0;
+	// Move anotherMove;
+	// state_type beg_State;
+	// sym_type RSym;
 
-	for(int i=0;i<order.size();i++)
-	{
-		if(order[i]!=' ')
-			converter+=order[i];
-		else
-		{
-			whichField++;
-			switch(whichField)
-			{
-				case 1: beg_State=converter;
-				case 2: RSym=converter[0];
-				case 3: anotherMove.sym=converter[0];
-				case 4: anotherMove.move=converter[0]=='L'?move_left:move_right;
-				case 5: break;
-			}
-			converter="";
-		}
-	}
-	anotherMove.state=converter;
-	Application::state_map.put(beg_State, RSym, anotherMove);
+	// for(int i=0;i<order.size();i++)
+	// {
+	// 	if(order[i]!=' ')
+	// 		converter+=order[i];
+	// 	else
+	// 	{
+	// 		whichField++;
+	// 		switch(whichField)
+	// 		{
+	// 			case 1: beg_State=converter;
+	// 			case 2: RSym=converter[0];
+	// 			case 3: anotherMove.sym=converter[0];
+	// 			case 4: anotherMove.move=converter[0]=='L'?move_left:move_right;
+	// 			case 5: break;
+	// 		}
+	// 		converter="";
+	// 	}
+	// }
+	// anotherMove.state=converter;
+	// Application::state_map.put(beg_State, RSym, anotherMove);
 }
 
 
@@ -205,63 +202,67 @@ Fl_Input *inputBegState, *inputRSym, *inputWSym, *inputDir, *inputEndState;
 
 void Application::add_button(Fl_Widget* e, void*)
 {
-	Fl_Window window(300, 400, "Dodaj rozkaz");
 
-	BoxPtr begText, rSymText, wSymText, dirText, endText;
+    Fl_Button* btn = dynamic_cast<Fl_Button*>(e);
+    Application* app = dynamic_cast<Application*>(btn->parent());
+    app->popup->show();
+	// Fl_Window window(300, 400, "Dodaj rozkaz");
+
+	// BoxPtr begText, rSymText, wSymText, dirText, endText;
 	
-	inputBegState = new Fl_Input(110, 30, 180, 17, "Stan poczatkowy: ");
-	inputBegState->value("");
-	inputBegState->labelsize(11);
-	inputBegState->textsize(11);
+	// inputBegState = new Fl_Input(110, 30, 180, 17, "Stan poczatkowy: ");
+	// inputBegState->value("");
+	// inputBegState->labelsize(11);
+	// inputBegState->textsize(11);
 	
-	begText = BoxPtr(new Fl_Box(10,50,280,50,"Stan, w jakim maszyna sie znajduje przed \nrozpoczeciem pracy (np.: 'STAN1')."));
-	begText->labelsize(11);
+	// begText = BoxPtr(new Fl_Box(10,50,280,50,"Stan, w jakim maszyna sie znajduje przed \nrozpoczeciem pracy (np.: 'STAN1')."));
+	// begText->labelsize(11);
 	
 
-	inputRSym = new Fl_Input(110, 100, 180, 17, "Czytany symbol:   ");
-	inputRSym -> value("");
-	inputRSym->labelsize(11);
-	inputRSym->textsize(11);
-	inputRSym->maximum_size(1);
+	// inputRSym = new Fl_Input(110, 100, 180, 17, "Czytany symbol:   ");
+	// inputRSym -> value("");
+	// inputRSym->labelsize(11);
+	// inputRSym->textsize(11);
+	// inputRSym->maximum_size(1);
 
-	rSymText = BoxPtr(new Fl_Box(10,115,280,50,"Symbol, ktory bedzie przeczytany z tasmy (np.: '#')."));
-	rSymText->labelsize(11);
+	// rSymText = BoxPtr(new Fl_Box(10,115,280,50,"Symbol, ktory bedzie przeczytany z tasmy (np.: '#')."));
+	// rSymText->labelsize(11);
 
-	inputWSym = new Fl_Input(110, 165, 180, 17, "Zapisany symbol:  ");
-	inputWSym -> value("");
-	inputWSym->labelsize(11);
-	inputWSym->textsize(11);
-	inputWSym->maximum_size(1);
+	// inputWSym = new Fl_Input(110, 165, 180, 17, "Zapisany symbol:  ");
+	// inputWSym -> value("");
+	// inputWSym->labelsize(11);
+	// inputWSym->textsize(11);
+	// inputWSym->maximum_size(1);
 
-	wSymText = BoxPtr(new Fl_Box(10,175,280,50,"Symbol, ktory bedzie zapisany do tasmy (np.: '1')."));
-	wSymText->labelsize(11);
+	// wSymText = BoxPtr(new Fl_Box(10,175,280,50,"Symbol, ktory bedzie zapisany do tasmy (np.: '1')."));
+	// wSymText->labelsize(11);
 
-	inputDir = new Fl_Input(110, 230, 180, 17, "Kierunek:               ");
-	inputDir -> value("");
-	inputDir->labelsize(11);
-	inputDir->textsize(11);
-	inputDir->maximum_size(1);
+	// inputDir = new Fl_Input(110, 230, 180, 17, "Kierunek:               ");
+	// inputDir -> value("");
+	// inputDir->labelsize(11);
+	// inputDir->textsize(11);
+	// inputDir->maximum_size(1);
 
-	dirText = BoxPtr(new Fl_Box(10,240,280,50,"Kierunek nastepnego ruchu glowicy (L lub P)."));
-	dirText->labelsize(11);
+	// dirText = BoxPtr(new Fl_Box(10,240,280,50,"Kierunek nastepnego ruchu glowicy (L lub P)."));
+	// dirText->labelsize(11);
 
-	inputEndState = new Fl_Input(110, 295, 180, 17, "Stan koncowy:      ");
-	inputEndState -> value("");
-	inputEndState->labelsize(11);
-	inputEndState->textsize(11);
+	// inputEndState = new Fl_Input(110, 295, 180, 17, "Stan koncowy:      ");
+	// inputEndState -> value("");
+	// inputEndState->labelsize(11);
+	// inputEndState->textsize(11);
 
-	endText = BoxPtr(new Fl_Box(10,305,280,50,"Stan maszyny, w jakim sie znajdzie \npo wykonaniu rozkazu (np.: 'STAN2')."));
-	endText->labelsize(11);
-
-
-	Fl_Button *addOrder;
-	addOrder = new Fl_Button(230, 350, 50, 30, "Dodaj");
-	addOrder->callback(send_order_input);
+	// endText = BoxPtr(new Fl_Box(10,305,280,50,"Stan maszyny, w jakim sie znajdzie \npo wykonaniu rozkazu (np.: 'STAN2')."));
+	// endText->labelsize(11);
 
 
-	window.end();
-	window.show();
-	Fl::run();
+	// Fl_Button *addOrder;
+	// addOrder = new Fl_Button(230, 350, 50, 30, "Dodaj");
+	// addOrder->callback(send_order_input);
+
+
+	// window.end();
+	// window.show();
+	// Fl::run();
 }
 
 void Application::send_order_input(Fl_Widget*, void*)

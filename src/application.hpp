@@ -13,11 +13,21 @@
 //#include "machine.hpp"
 #include "state_map.hpp"
 
+class Popup: public Fl_Window {
+public:
+    Popup(StateMap* state_map): Fl_Window(300, 400, "Dodaj rozkaz"), state_map_(state_map) {
+        end();
+    }
+private:
+    StateMap* state_map_;
+};
+
 class Application: public Fl_Window{
 public:
     typedef std::unique_ptr<Fl_Menu_Bar> MenuBarPtr;
     typedef std::unique_ptr<Fl_Box> BoxPtr;
     typedef std::unique_ptr<Fl_Button> ButtonPtr;
+    typedef std::unique_ptr<Popup> PopupPtr;
 
     Application(int w, int h);
 	~Application( void );
@@ -36,12 +46,11 @@ public:
 	static void send_order_input(Fl_Widget*, void*);//to StateMap
 	static void send_order_Ffile(std::string);
 
-	
-
 private:
     int w_, h_;
-	static StateMap state_map;
+	  StateMap state_map;
     MenuBarPtr menu_Bar;
+
     BoxPtr box;
     BoxPtr tape;
     BoxPtr service;
@@ -54,6 +63,8 @@ private:
     BoxPtr write_sym;
     BoxPtr dir;
     BoxPtr state_end;	
+
+    PopupPtr popup;
 };
 
 
