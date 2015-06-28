@@ -3,6 +3,9 @@
 #include "statesTable.hpp"
 #include <string>
 
+#include <fstream>
+#include <FL/Fl_Native_File_Chooser.H>
+
 
 Fl_Menu_Item menuitems[] =
 {
@@ -17,14 +20,18 @@ Fl_Menu_Item menuitems[] =
 	{ 0 },
 };
 
-
+void rusz_cb( Fl_Widget* o, void* v )
+{
+double wartosc = ((Fl_Slider* ) o)->value();
+/* ... */
+}
 
 Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
                                         w_(w), h_(h) {
-  menu_Bar = MenuBarPtr(new Fl_Menu_Bar( -1, 0, w_+3, 30));
+	menu_Bar = MenuBarPtr(new Fl_Menu_Bar( -1, 0, w_+3, 30));
 	menu_Bar->copy( menuitems );
 	
-
+	
 	tape = BoxPtr(new Fl_Box(-1, 60+1, w_+3, 30, "TAPE"));
 	tape->box(FL_UP_BOX);
 
@@ -37,20 +44,34 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
 	start = ButtonPtr(new Fl_Button(75, 100, 50, 30, "Start"));
 	start->callback(open_machine);
 	
-	box = BoxPtr(new Fl_Box(-1,29,w_,471,"StatesTable"));
-	state_beg = BoxPtr(new Fl_Box(12,170, 125,35,"Stan poczatkowy"));
-	state_beg->box(FL_BORDER_BOX);
+	statesTable table;
+	/*Fl_Slider *suwak;
+	suwak = new Fl_Slider( w_-15, 170, 20, h_, "");
+	suwak->range( -5, 5 ); //zakres wartoœci
+	suwak->step( 0.1 ); //krok
+	suwak->value( 0 );
+	suwak->callback( rusz_cb ); */
 
-	read_sym = BoxPtr(new Fl_Box(136,170, 145,35,"Przeczytany symbol"));
-	read_sym->box(FL_BORDER_BOX);
-	write_sym = BoxPtr(new Fl_Box(280,170, 125,35,"Wpisany symbol"));
-	write_sym->box(FL_BORDER_BOX);
-	dir = BoxPtr(new Fl_Box(404,170, 75,35,"Kierunek"));
-	dir->box(FL_BORDER_BOX);
-	state_end = BoxPtr(new Fl_Box(478,170, 105,35,"Stan koncowy"));
-	state_end->box(FL_BORDER_BOX);
+	table.height=170;
+	table.addRow("STAN0", "#", "1", "L", "STAN1");//przy 9 wlaczyc suwak
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
+	//table.addRow("STAN1", "#", "0", "L", "STAN2");
 
-	
+
+//	Machine machine;
+	//Application::state_map =&machine;
 	end();
     show();
 }
@@ -65,8 +86,18 @@ void Application::new_machine( Fl_Widget*, void* )
 void Application::open_machine( Fl_Widget*, void* )
 {
 	Fl_File_Chooser *fc;
+	fc->filename_label = "Nazwa pliku:";
+	fc->show_label = "Pokazuj:";
+	fc->all_files_label = "Wszystkie pliki (*)";
+	fc->custom_filter_label = "Wlasny filtr";
+	fc->add_favorites_label = "Dodaj do ulubionych";
+	fc->favorites_label = "Ulubione";
+	fc->manage_favorites_label = "Zarzadzaj ulubionymi";
+	fc->filesystems_label = "Moj komputer";
+	fl_cancel="Anuluj";
+
 	fc = new Fl_File_Chooser( "c:\\", "*.tur",
-	Fl_File_Chooser::SINGLE, "Otwieranie" );
+	Fl_File_Chooser::SINGLE, "Otwieranie maszyny" );
 	fc->preview( 0 );
 	fc->ok_label( "Otwórz" );
 	fc->previewButton->hide();
@@ -79,40 +110,115 @@ void Application::open_tur( Fl_File_Chooser* o, void *v )
 	std::string pathname;
 	pathname=o->value();
 if( !o->visible() )
+{
 	std::cout<<pathname;
+	std::string s;
+	std::ifstream plik( pathname );
+	while( true )
+	{
+		std::getline( plik, s );
+		send_order_Ffile(s);
+		if( plik.eof() ) break;
+	}
+	plik.close();
 }
+}
+
+void Application::send_order_Ffile(std::string order)
+{
+	std::string converter;
+	int whichField=0;
+	Move anotherMove;
+	state_type beg_State;
+	sym_type RSym;
+
+	for(int i=0;i<order.size();i++)
+	{
+		if(order[i]!=' ')
+			converter+=order[i];
+		else
+		{
+			whichField++;
+			switch(whichField)
+			{
+				case 1: beg_State=converter;
+				case 2: RSym=converter[0];
+				case 3: anotherMove.sym=converter[0];
+				case 4: anotherMove.move=converter[0]=='L'?move_left:move_right;
+				case 5: break;
+			}
+			converter="";
+		}
+	}
+	anotherMove.state=converter;
+	Application::state_map.put(beg_State, RSym, anotherMove);
+}
+
 
 void Application::save_machine( Fl_Widget*, void* )
 {
+	Fl_File_Chooser *fc;
+	fc->filename_label = "Nazwa pliku:";
+	fc->show_label = "Pokazuj:";
+	fc->all_files_label = "Wszystkie pliki (*)";
+	fc->custom_filter_label = "Wlasny filtr";
+	fc->add_favorites_label = "Dodaj do ulubionych";
+	fc->favorites_label = "Ulubione";
+	fc->manage_favorites_label = "Zarzadzaj ulubionymi";
+	fc->filesystems_label = "Moj komputer";
+	fl_cancel="Anuluj";
+
+	fc = new Fl_File_Chooser( "c:\\", "*",
+	Fl_File_Chooser::CREATE, "Zapisywanie maszyny" );
+	fc->preview( 0 );
+	fc->ok_label( "Zapisz" );
+	fc->previewButton->hide();
+	fc->newButton->hide();
+	fc->callback( save_tur );
+	fc->show();
 
 }
+
+void Application::save_tur( Fl_File_Chooser* o, void *v )
+{
+	std::string pathname;
+	pathname=o->value();
+//if( !o->visible() )
+	pathname+=".tur";
+	std::cout<<pathname;
+
+}
+
 void Application::show_information( Fl_Widget*, void* )
 {
-	fl_message("Tutaj beda jakies informacje o programie?");
-	
+	fl_message_title("Informacje o programie");
+	fl_close="Zamknij";
+	fl_message("Aktualna wersja programu:1.0.0 \n\nProgram MaszynaTuringa zostal opracowany przez Michala Muskale "
+		"oraz Kamila Kryusa \nna potrzeby projektu szkolnego. By dowiedziec sie wiecej porozmawiaj z autorami programu.");
 }
 void Application::exit( Fl_Widget* e )
 {
 	((Fl_Widget*) e)->parent()->hide();
 }
 
-void Application::add_button(Fl_Widget*, void*)
+Fl_Input *inputBegState, *inputRSym, *inputWSym, *inputDir, *inputEndState;
+
+void Application::add_button(Fl_Widget* e, void*)
 {
 	Fl_Window window(300, 400, "Dodaj rozkaz");
-	
-	//inputBegState = new Fl_Input(110, 30, 180, 17, "Stan poczatkowy: ");
+
 	BoxPtr begText, rSymText, wSymText, dirText, endText;
 	
-	inputy::inputBegState = InputPtr(new Fl_Input(110, 30, 180, 17, "Stan poczatkowy: "));
-	inputy::inputBegState -> value("");
-	inputy::inputBegState->labelsize(11);
-	inputy::inputBegState->textsize(11);
-
+	inputBegState = new Fl_Input(110, 30, 180, 17, "Stan poczatkowy: ");
+	inputBegState->value("");
+	inputBegState->labelsize(11);
+	inputBegState->textsize(11);
+	
 	begText = BoxPtr(new Fl_Box(10,50,280,50,"Stan, w jakim maszyna sie znajduje przed \nrozpoczeciem pracy (np.: 'STAN1')."));
 	begText->labelsize(11);
 	
 
-	/*inputRSym = InputPtr(new Fl_Input(110, 100, 180, 17, "Czytany symbol:   "));
+	inputRSym = new Fl_Input(110, 100, 180, 17, "Czytany symbol:   ");
 	inputRSym -> value("");
 	inputRSym->labelsize(11);
 	inputRSym->textsize(11);
@@ -121,7 +227,7 @@ void Application::add_button(Fl_Widget*, void*)
 	rSymText = BoxPtr(new Fl_Box(10,115,280,50,"Symbol, ktory bedzie przeczytany z tasmy (np.: '#')."));
 	rSymText->labelsize(11);
 
-	inputWSym = InputPtr(new Fl_Input(110, 165, 180, 17, "Zapisany symbol:  "));
+	inputWSym = new Fl_Input(110, 165, 180, 17, "Zapisany symbol:  ");
 	inputWSym -> value("");
 	inputWSym->labelsize(11);
 	inputWSym->textsize(11);
@@ -130,7 +236,7 @@ void Application::add_button(Fl_Widget*, void*)
 	wSymText = BoxPtr(new Fl_Box(10,175,280,50,"Symbol, ktory bedzie zapisany do tasmy (np.: '1')."));
 	wSymText->labelsize(11);
 
-	inputDir = InputPtr(new Fl_Input(110, 230, 180, 17, "Kierunek:               "));
+	inputDir = new Fl_Input(110, 230, 180, 17, "Kierunek:               ");
 	inputDir -> value("");
 	inputDir->labelsize(11);
 	inputDir->textsize(11);
@@ -139,26 +245,36 @@ void Application::add_button(Fl_Widget*, void*)
 	dirText = BoxPtr(new Fl_Box(10,240,280,50,"Kierunek nastepnego ruchu glowicy (L lub P)."));
 	dirText->labelsize(11);
 
-	inputEndState = InputPtr(new Fl_Input(110, 295, 180, 17, "Stan koncowy:      "));
+	inputEndState = new Fl_Input(110, 295, 180, 17, "Stan koncowy:      ");
 	inputEndState -> value("");
 	inputEndState->labelsize(11);
 	inputEndState->textsize(11);
 
 	endText = BoxPtr(new Fl_Box(10,305,280,50,"Stan maszyny, w jakim sie znajdzie \npo wykonaniu rozkazu (np.: 'STAN2')."));
-	endText->labelsize(11);*/
+	endText->labelsize(11);
 
 
 	Fl_Button *addOrder;
 	addOrder = new Fl_Button(230, 350, 50, 30, "Dodaj");
-	addOrder->callback(okej);
+	addOrder->callback(send_order_input);
 
-	
+
 	window.end();
 	window.show();
 	Fl::run();
+}
 
-}
-void Application::okej(Fl_Widget*, void* param)
+void Application::send_order_input(Fl_Widget*, void*)
 {
-	//std::cout<<Application::inputBegState->value(); do tego momentu jeszcze nie doszedlem
+	Move anotherMove;
+	state_type BegState=inputBegState->value();
+	sym_type RSymbol=inputRSym->value()[0];
+	anotherMove.sym=inputWSym->value()[0];
+	anotherMove.state=inputEndState->value();
+	if(inputDir->value()[0]=='L')
+		anotherMove.move=move_left;
+	else
+		anotherMove.move=move_right;
+	//machine.put(BegState, RSymbol, anotherMove);
 }
+

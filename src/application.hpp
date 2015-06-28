@@ -7,15 +7,17 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_BMP_Image.H>
 #include <FL/Fl_Box.H>
-
 #include <memory>
+#include <FL/Fl_Slider.H>
+#include <string>
+//#include "machine.hpp"
+#include "state_map.hpp"
 
 class Application: public Fl_Window{
 public:
     typedef std::unique_ptr<Fl_Menu_Bar> MenuBarPtr;
     typedef std::unique_ptr<Fl_Box> BoxPtr;
     typedef std::unique_ptr<Fl_Button> ButtonPtr;
-	typedef std::unique_ptr<Fl_Input> InputPtr;
 
     Application(int w, int h);
 	~Application( void );
@@ -28,12 +30,17 @@ public:
 	static void exit( Fl_Widget* );
 
 	static void open_tur( Fl_File_Chooser* o, void *v );
+	static void save_tur( Fl_File_Chooser* o, void *v );
 	static void add_button(Fl_Widget*, void*);
 
-	static void okej(Fl_Widget*, void*);
-	//static Fl_Input *inputBegState;
+	static void send_order_input(Fl_Widget*, void*);//to StateMap
+	static void send_order_Ffile(std::string);
+
+	
+
 private:
     int w_, h_;
+	static StateMap state_map;
     MenuBarPtr menu_Bar;
     BoxPtr box;
     BoxPtr tape;
@@ -46,19 +53,8 @@ private:
     BoxPtr read_sym;
     BoxPtr write_sym;
     BoxPtr dir;
-    BoxPtr state_end;
-	
-	
+    BoxPtr state_end;	
 };
 
-class inputy
-{
-public:
-	typedef std::unique_ptr<Fl_Input> InputPtr;
-	friend class Application;
-private:
-	static InputPtr  inputBegState;
-	//inputRSym, inputWSym, inputDir, inputEndState;
-};
 
 #endif

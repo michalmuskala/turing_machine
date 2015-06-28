@@ -1,6 +1,6 @@
 #ifndef TURING_MACHINE_STATE_MAP
 #define TURING_MACHINE_STATE_MAP
-
+#include <string>
 #include <map>
 
 typedef char sym_type;

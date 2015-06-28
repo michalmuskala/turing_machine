@@ -12,7 +12,7 @@
 
 int main()
 {
-    // Machine machine;
+     //Machine machine;
     // machine.parse(std::cin);
 
     // Machine::callback_type callback = [](const state_type& state, const sym_type sym) {
