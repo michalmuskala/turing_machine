@@ -4,16 +4,15 @@
 #include <string>
 
 #include <fstream>
-#include <FL/Fl_Native_File_Chooser.H>
 
 
 Fl_Menu_Item menuitems[] =
 {
 	{ "Program", 0, 0, 0, FL_SUBMENU },
-	{ "&Nowy program", FL_CTRL + 'p', (Fl_Callback *)Application::new_machine },
+	{ "&Nowy program", FL_CTRL + 'n', (Fl_Callback *)Application::new_machine },
 	{ "&Otwórz program", FL_CTRL + 'o', (Fl_Callback *)Application::open_machine },
 	{ "Zapisz program", FL_CTRL + 's', (Fl_Callback *)Application::save_machine, 0, FL_MENU_DIVIDER },
-	{ "Koniec", 0, (Fl_Callback *)Application::exit },
+	{ "Zakoncz", 0, (Fl_Callback *)Application::exit },
 	{ 0 },
 	{ "Opcje", 0, 0, 0, FL_SUBMENU },
 	{ "&Informacje o programie", FL_CTRL + 'i', (Fl_Callback *)Application::show_information },
@@ -30,7 +29,7 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
                                         w_(w), h_(h), state_map() {
 	menu_Bar = MenuBarPtr(new Fl_Menu_Bar( -1, 0, w_+3, 30));
 	menu_Bar->copy( menuitems );
-
+	std::cout<<menu_Bar->size();
 	tape = BoxPtr(new Fl_Box(-1, 60+1, w_+3, 30, "TAPE"));
 	tape->box(FL_UP_BOX);
 
@@ -42,7 +41,6 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
 
 	start = ButtonPtr(new Fl_Button(75, 100, 50, 30, "Start"));
 	start->callback(open_machine);
-	
 	statesTable table;
 	/*Fl_Slider *suwak;
 	suwak = new Fl_Slider( w_-15, 170, 20, h_, "");
@@ -67,7 +65,6 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
 	//table.addRow("STAN1", "#", "0", "L", "STAN2");
 	//table.addRow("STAN1", "#", "0", "L", "STAN2");
 	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-
   popup = PopupPtr(new Popup(&state_map));
 	end();
     show();
@@ -77,7 +74,7 @@ Application::~Application( void)
 }
 
 
-void Application::new_machine( Fl_Widget*, void* )
+void Application::new_machine( Fl_Widget*, void*)
 {
 }
 void Application::open_machine( Fl_Widget*, void* )
@@ -110,14 +107,18 @@ if( !o->visible() )
 {
 	std::cout<<pathname;
 	std::string s;
-	std::ifstream plik( pathname );
+	std::ifstream file( pathname );
 	while( true )
 	{
-		std::getline( plik, s );
+		std::getline( file, s );
 		send_order_Ffile(s);
-		if( plik.eof() ) break;
+		if( file.eof() ) break;
 	}
-	plik.close();
+	file.close();
+
+	fl_message_title("Otwieranie pliku");
+	fl_close="Zamknij";
+	fl_message("Otwieranie pliku powiodlo sie");
 }
 }
 
@@ -173,18 +174,33 @@ void Application::save_machine( Fl_Widget*, void* )
 	fc->newButton->hide();
 	fc->callback( save_tur );
 	fc->show();
-
 }
 
-void Application::save_tur( Fl_File_Chooser* o, void *v )
+void Application::save_tur( Fl_File_Chooser* e, void *v )
 {
+	Fl_File_Chooser* btn = dynamic_cast<Fl_File_Chooser*>(e);
+//    Application* app = dynamic_cast<Application*>(btn->parent());
+   // app->popup->show();
+
 	std::string pathname;
-	pathname=o->value();
+	pathname=e->value();
 //if( !o->visible() )
 	pathname+=".tur";
-	std::cout<<pathname;
-
+	std::ofstream plik( pathname );
+	if( plik.is_open() )
+	{
+	//state_map.put();
+		plik << "Napis\n" << "inny" << std::endl;
+		plik << 12;
+		plik.close();
+	}
+	else
+		std::cout << "Nieudane otwarcie pliku." << std::endl;
+	fl_message_title("Zapis do pliku");
+	fl_close="Zamknij";
+	fl_message("Zapis do pliku udal sie");
 }
+
 
 void Application::show_information( Fl_Widget*, void* )
 {
@@ -198,84 +214,10 @@ void Application::exit( Fl_Widget* e )
 	((Fl_Widget*) e)->parent()->hide();
 }
 
-Fl_Input *inputBegState, *inputRSym, *inputWSym, *inputDir, *inputEndState;
 
 void Application::add_button(Fl_Widget* e, void*)
 {
-
     Fl_Button* btn = dynamic_cast<Fl_Button*>(e);
     Application* app = dynamic_cast<Application*>(btn->parent());
     app->popup->show();
-	// Fl_Window window(300, 400, "Dodaj rozkaz");
-
-	// BoxPtr begText, rSymText, wSymText, dirText, endText;
-	
-	// inputBegState = new Fl_Input(110, 30, 180, 17, "Stan poczatkowy: ");
-	// inputBegState->value("");
-	// inputBegState->labelsize(11);
-	// inputBegState->textsize(11);
-	
-	// begText = BoxPtr(new Fl_Box(10,50,280,50,"Stan, w jakim maszyna sie znajduje przed \nrozpoczeciem pracy (np.: 'STAN1')."));
-	// begText->labelsize(11);
-	
-
-	// inputRSym = new Fl_Input(110, 100, 180, 17, "Czytany symbol:   ");
-	// inputRSym -> value("");
-	// inputRSym->labelsize(11);
-	// inputRSym->textsize(11);
-	// inputRSym->maximum_size(1);
-
-	// rSymText = BoxPtr(new Fl_Box(10,115,280,50,"Symbol, ktory bedzie przeczytany z tasmy (np.: '#')."));
-	// rSymText->labelsize(11);
-
-	// inputWSym = new Fl_Input(110, 165, 180, 17, "Zapisany symbol:  ");
-	// inputWSym -> value("");
-	// inputWSym->labelsize(11);
-	// inputWSym->textsize(11);
-	// inputWSym->maximum_size(1);
-
-	// wSymText = BoxPtr(new Fl_Box(10,175,280,50,"Symbol, ktory bedzie zapisany do tasmy (np.: '1')."));
-	// wSymText->labelsize(11);
-
-	// inputDir = new Fl_Input(110, 230, 180, 17, "Kierunek:               ");
-	// inputDir -> value("");
-	// inputDir->labelsize(11);
-	// inputDir->textsize(11);
-	// inputDir->maximum_size(1);
-
-	// dirText = BoxPtr(new Fl_Box(10,240,280,50,"Kierunek nastepnego ruchu glowicy (L lub P)."));
-	// dirText->labelsize(11);
-
-	// inputEndState = new Fl_Input(110, 295, 180, 17, "Stan koncowy:      ");
-	// inputEndState -> value("");
-	// inputEndState->labelsize(11);
-	// inputEndState->textsize(11);
-
-	// endText = BoxPtr(new Fl_Box(10,305,280,50,"Stan maszyny, w jakim sie znajdzie \npo wykonaniu rozkazu (np.: 'STAN2')."));
-	// endText->labelsize(11);
-
-
-	// Fl_Button *addOrder;
-	// addOrder = new Fl_Button(230, 350, 50, 30, "Dodaj");
-	// addOrder->callback(send_order_input);
-
-
-	// window.end();
-	// window.show();
-	// Fl::run();
 }
-
-void Application::send_order_input(Fl_Widget*, void*)
-{
-	Move anotherMove;
-	state_type BegState=inputBegState->value();
-	sym_type RSymbol=inputRSym->value()[0];
-	anotherMove.sym=inputWSym->value()[0];
-	anotherMove.state=inputEndState->value();
-	if(inputDir->value()[0]=='L')
-		anotherMove.move=move_left;
-	else
-		anotherMove.move=move_right;
-	//machine.put(BegState, RSymbol, anotherMove);
-}
-

@@ -12,15 +12,8 @@
 #include <string>
 //#include "machine.hpp"
 #include "state_map.hpp"
+#include "popup.hpp"
 
-class Popup: public Fl_Window {
-public:
-    Popup(StateMap* state_map): Fl_Window(300, 400, "Dodaj rozkaz"), state_map_(state_map) {
-        end();
-    }
-private:
-    StateMap* state_map_;
-};
 
 class Application: public Fl_Window{
 public:
@@ -43,12 +36,12 @@ public:
 	static void save_tur( Fl_File_Chooser* o, void *v );
 	static void add_button(Fl_Widget*, void*);
 
-	static void send_order_input(Fl_Widget*, void*);//to StateMap
+	
 	static void send_order_Ffile(std::string);
 
 private:
     int w_, h_;
-	  StateMap state_map;
+	StateMap state_map;
     MenuBarPtr menu_Bar;
 
     BoxPtr box;
