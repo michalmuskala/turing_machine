@@ -4,6 +4,7 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Button.H>
 
+#include <memory>
 
 class Popup: public Fl_Window {
 public:

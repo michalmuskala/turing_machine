@@ -6,18 +6,18 @@
 #include <fstream>
 
 
-Fl_Menu_Item menuitems[] =
-{
-	{ "Program", 0, 0, 0, FL_SUBMENU },
-	{ "&Nowy program", FL_CTRL + 'n', (Fl_Callback *)Application::new_machine },
-	{ "&Otwórz program", FL_CTRL + 'o', (Fl_Callback *)Application::open_machine },
-	{ "Zapisz program", FL_CTRL + 's', (Fl_Callback *)Application::save_machine, 0, FL_MENU_DIVIDER },
-	{ "Zakoncz", 0, (Fl_Callback *)Application::exit },
-	{ 0 },
-	{ "Opcje", 0, 0, 0, FL_SUBMENU },
-	{ "&Informacje o programie", FL_CTRL + 'i', (Fl_Callback *)Application::show_information },
-	{ 0 },
-};
+// Fl_Menu_Item menuitems[] =
+// {
+// 	{ "Program", 0, 0, 0, FL_SUBMENU },
+// 	{ "&Nowy program", FL_CTRL + 'n', (Fl_Callback *)Application::new_machine },
+// 	{ "&Otwórz program", FL_CTRL + 'o', (Fl_Callback *)Application::open_machine },
+// 	{ "Zapisz program", FL_CTRL + 's', (Fl_Callback *)Application::save_machine, 0, FL_MENU_DIVIDER },
+// 	{ "Zakoncz", 0, (Fl_Callback *)Application::exit },
+// 	{ 0 },
+// 	{ "Opcje", 0, 0, 0, FL_SUBMENU },
+// 	{ "&Informacje o programie", FL_CTRL + 'i', (Fl_Callback *)Application::show_information },
+// 	{ 0 },
+// };
 
 void rusz_cb( Fl_Widget* o, void* v )
 {
@@ -27,9 +27,8 @@ double wartosc = ((Fl_Slider* ) o)->value();
 
 Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
                                         w_(w), h_(h), state_map() {
-	menu_Bar = MenuBarPtr(new Fl_Menu_Bar( -1, 0, w_+3, 30));
-	menu_Bar->copy( menuitems );
-	std::cout<<menu_Bar->size();
+    menu_ = MenuPtr(new Menu(this));
+
 	tape = BoxPtr(new Fl_Box(-1, 60+1, w_+3, 30, "TAPE"));
 	tape->box(FL_UP_BOX);
 
@@ -156,55 +155,21 @@ void Application::send_order_Ffile(std::string order)
 	// Application::state_map.put(beg_State, RSym, anotherMove);
 }
 
+void Application::save_machine(const std::string& path) {
+    std::ofstream plik(path + ".tur");
 
-void Application::save_machine( Fl_Widget*, void* )
-{
-	Fl_File_Chooser *fc;
-	fc->filename_label = "Nazwa pliku:";
-	fc->show_label = "Pokazuj:";
-	fc->all_files_label = "Wszystkie pliki (*)";
-	fc->custom_filter_label = "Wlasny filtr";
-	fc->add_favorites_label = "Dodaj do ulubionych";
-	fc->favorites_label = "Ulubione";
-	fc->manage_favorites_label = "Zarzadzaj ulubionymi";
-	fc->filesystems_label = "Moj komputer";
-	fl_cancel="Anuluj";
+    if( plik.is_open() ) {
+        //state_map.put();
+        plik << "Napis\n" << "inny" << std::endl;
+        plik << 12;
+        plik.close();
+    } else
+        std::cout << "Nieudane otwarcie pliku." << std::endl;
 
-	fc = new Fl_File_Chooser( "c:\\", "*",
-	Fl_File_Chooser::CREATE, "Zapisywanie maszyny" );
-	fc->preview( 0 );
-	fc->ok_label( "Zapisz" );
-	fc->previewButton->hide();
-	fc->newButton->hide();
-	fc->callback( save_tur );
-	fc->show();
+    fl_message_title("Zapis do pliku");
+    fl_close="Zamknij";
+    fl_message("Zapis do pliku udal sie");
 }
-
-void Application::save_tur( Fl_File_Chooser* e, void *v )
-{
-	Fl_File_Chooser* btn = dynamic_cast<Fl_File_Chooser*>(e);
-//    Application* app = dynamic_cast<Application*>(btn->parent());
-   // app->popup->show();
-
-	std::string pathname;
-	pathname=e->value();
-//if( !o->visible() )
-	pathname+=".tur";
-	std::ofstream plik( pathname );
-	if( plik.is_open() )
-	{
-	//state_map.put();
-		plik << "Napis\n" << "inny" << std::endl;
-		plik << 12;
-		plik.close();
-	}
-	else
-		std::cout << "Nieudane otwarcie pliku." << std::endl;
-	fl_message_title("Zapis do pliku");
-	fl_close="Zamknij";
-	fl_message("Zapis do pliku udal sie");
-}
-
 
 void Application::show_information( Fl_Widget*, void* )
 {

@@ -13,27 +13,28 @@
 //#include "machine.hpp"
 #include "state_map.hpp"
 #include "popup.hpp"
+#include "menu.hpp"
 
 
 class Application: public Fl_Window{
 public:
-    typedef std::unique_ptr<Fl_Menu_Bar> MenuBarPtr;
     typedef std::unique_ptr<Fl_Box> BoxPtr;
     typedef std::unique_ptr<Fl_Button> ButtonPtr;
     typedef std::unique_ptr<Popup> PopupPtr;
+    typedef std::unique_ptr<Menu> MenuPtr;
 
     Application(int w, int h);
-	~Application( void );
+    ~Application( void );
+
+    void save_machine(const std::string& path);
 
 
 	static void new_machine( Fl_Widget*, void* );
 	static void open_machine( Fl_Widget*, void* );
-	static void save_machine( Fl_Widget*, void* );
 	static void show_information( Fl_Widget*, void* );
 	static void exit( Fl_Widget* );
 
 	static void open_tur( Fl_File_Chooser* o, void *v );
-	static void save_tur( Fl_File_Chooser* o, void *v );
 	static void add_button(Fl_Widget*, void*);
 
 	
@@ -41,8 +42,8 @@ public:
 
 private:
     int w_, h_;
-	StateMap state_map;
-    MenuBarPtr menu_Bar;
+    StateMap state_map;
+    MenuPtr menu_;
 
     BoxPtr box;
     BoxPtr tape;
