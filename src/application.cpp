@@ -71,11 +71,15 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
 }
 Application::~Application( void)
 {
+
 }
 
 
-void Application::new_machine( Fl_Widget*, void*)
+void Application::new_machine( Fl_Widget* e, void*)
 {
+	Fl_Menu_Bar* btn = dynamic_cast<Fl_Menu_Bar*>(e);
+    Application* app = dynamic_cast<Application*>(btn->parent());
+    app->state_map.clear();
 }
 void Application::open_machine( Fl_Widget*, void* )
 {

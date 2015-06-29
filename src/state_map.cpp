@@ -38,3 +38,9 @@ const Move& StateMap::get(const state_type& state, const sym_type sym) const {
         return it->second.get(sym);
     }
 }
+
+
+void StateMap::clear()
+{
+	map_.clear();
+}
