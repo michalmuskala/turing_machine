@@ -22,7 +22,7 @@ const Move& SymMap::get(const sym_type sym) const {
 
 void StateMap::put(const state_type& state1, const sym_type sym1, const sym_type sym2, const move_type move, const state_type& state2) {
     Move action = {sym2, state2, move};
-    put(state1, sym2, action);
+    put(state1, sym1, action);
 }
 
 void StateMap::put(const state_type& state, const sym_type sym, const Move& move) {

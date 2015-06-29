@@ -18,6 +18,15 @@ public:
     static void open_save_machine(Fl_Widget*, void*);
     static void save_machine(Fl_File_Chooser*, void*);
 
+	static void open_load_machine(Fl_Widget*, void*);
+    static void open_machine(Fl_File_Chooser*, void*);
+
+
+	static void new_machine(Fl_Widget*, void*);
+	static void open_existing_machine( Fl_Widget*, void* );
+	static void show_information( Fl_Widget*, void* );
+	static void endProgram( Fl_Widget*, void* );
+
 private:
     Application* app_;
     FileChooserPtr save_;

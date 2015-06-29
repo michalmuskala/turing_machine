@@ -23,6 +23,7 @@ int main()
 
     // std::cerr << machine.run() << std::endl;
 
+
     Application application(600, 500);
     return Fl::run();
 

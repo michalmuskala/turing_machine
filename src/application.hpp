@@ -10,7 +10,6 @@
 #include <memory>
 #include <FL/Fl_Slider.H>
 #include <string>
-//#include "machine.hpp"
 #include "state_map.hpp"
 #include "popup.hpp"
 #include "menu.hpp"
@@ -26,19 +25,12 @@ public:
     Application(int w, int h);
     ~Application( void );
 
-    void save_machine(const std::string& path);
-
-
-	static void new_machine( Fl_Widget*, void* );
-	static void open_machine( Fl_Widget*, void* );
-	static void show_information( Fl_Widget*, void* );
-	static void exit( Fl_Widget* );
-
-	static void open_tur( Fl_File_Chooser* o, void *v );
 	static void add_button(Fl_Widget*, void*);
 
-	
-	static void send_order_Ffile(std::string);
+    void save_machine( const std::string& path);
+	void open_machine( const std::string& path);
+
+	static void Application::clir(Application*);
 
 private:
     int w_, h_;
