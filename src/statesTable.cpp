@@ -32,23 +32,14 @@ void statesTable::addRow()
 {
 	Fl_Box *state_beg, *read_sym, *write_sym, *dir, *state_end;
 
-	char *znaki;
-	//const char* okej="z";
-	
 	for (auto i = state_map_->begin(); i != state_map_->end(); ++i)
 	{
 		for (auto j = i->second.begin(); j != i->second.end(); ++j)
 		{
 			state_beg = new Fl_Box(12,height+34, 125,35,i->first.c_str());
 			state_beg->box(FL_BORDER_BOX);
-			
-			//*znaki=j->first;
-			//znaki = new char(j->first);
-			//okej=znaki;
 
-			//read_sym = new Fl_Box(136,statesTable::height+34, 145,35, std::string(j->first).c_str());
-			std::cout<<j->first;
-			read_sym = new Fl_Box(136,statesTable::height+34, 145,35, &j->first);
+			read_sym = new Fl_Box(136,statesTable::height+34, 145,35, j->first.c_str());
 			//read_sym->box(FL_BORDER_BOX);
 			//write_sym = new Fl_Box(280,height+34, 125,35, j->second.sym);
 			//write_sym->box(FL_BORDER_BOX);

@@ -35,8 +35,8 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
 	
 
 	suwak->callback( rusz_cb ); */
-	state_map.put("START", '0', Move::empty);
-	state_map.put("END", 'k', Move::empty);
+	state_map.put("START", "0", Move::empty);
+	state_map.put("END", "k", Move::empty);
 
 	table.height=170;
 	table.addRow();
@@ -99,8 +99,9 @@ void Application::save_machine(const std::string& path)
 void Application::open_machine( const std::string& path )
 {
     std::ifstream plik(path);
-	std:: string stateF, stateL, order;
-	char symF='0', symL='1', dir='L';
+    state_type stateF, stateL, order;
+    sym_type symF="0", symL="1";
+    char dir='L';
     if( plik.is_open() )
 	{
 		while(!plik.eof())

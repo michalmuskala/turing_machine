@@ -31,7 +31,7 @@ public:
     void save_machine( const std::string& path);
 	void open_machine( const std::string& path);
 
-	static void Application::clir(Application*);
+	static void clir(Application*);
 
 private:
     int w_, h_;

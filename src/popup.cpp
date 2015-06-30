@@ -62,8 +62,8 @@ void Popup::send_order_input(Fl_Widget* e, void*)
 {
 	Move anotherMove;
 	state_type BegState=inputBegState->value();
-	sym_type RSymbol=inputRSym->value()[0];
-	anotherMove.sym=inputWSym->value()[0];
+	sym_type RSymbol=inputRSym->value();
+	anotherMove.sym=inputWSym->value();
 	anotherMove.state=inputEndState->value();
 	if(inputDir->value()[0]=='L')
 		anotherMove.move=move_left;

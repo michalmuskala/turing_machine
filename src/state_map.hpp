@@ -3,11 +3,11 @@
 #include <string>
 #include <map>
 
-typedef char sym_type;
+typedef std::string sym_type;
 typedef std::string state_type;
 typedef enum {move_left, move_right} move_type;
 
-const sym_type empty_sym = '#';
+const sym_type empty_sym = "#";
 const state_type start_state = "START";
 const state_type halt_state = "HALT";
 const state_type error_state = "ERROR";
