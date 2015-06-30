@@ -21,6 +21,7 @@ public:
     typedef std::unique_ptr<Fl_Box> BoxPtr;
     typedef std::unique_ptr<Fl_Button> ButtonPtr;
     typedef std::unique_ptr<Popup> PopupPtr;
+	typedef std::unique_ptr<statesTable> statesTablePtr;
     typedef std::unique_ptr<Menu> MenuPtr;
 
     Application(int w, int h);
@@ -36,6 +37,7 @@ public:
 private:
     int w_, h_;
     StateMap state_map;
+	statesTablePtr table_;
     MenuPtr menu_;
 
     BoxPtr box;

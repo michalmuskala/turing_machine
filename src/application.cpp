@@ -12,7 +12,7 @@ double wartosc = ((Fl_Slider* ) o)->value();
 }
 
 Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
-                                        w_(w), h_(h), state_map() {
+                                        w_(w), h_(h), state_map(){//, table_() {
     menu_ = MenuPtr(new Menu(this));
 
 	tape = BoxPtr(new Fl_Box(-1, 60+1, w_+3, 30, "TAPE"));
@@ -26,36 +26,27 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
 	
 	start = ButtonPtr(new Fl_Button(75, 100, 50, 30, "Start"));
 	//start->callback();
-	statesTable table(&state_map);
+	//statesTable table(&state_map);
 	/*Fl_Slider *suwak;
 	suwak = new Fl_Slider( w_-15, 170, 20, h_, "");
 	suwak->range( -5, 5 ); //zakres wartoœci
 	suwak->step( 0.1 ); //krok
 	suwak->value( 0 );
 	
-
+	
 	suwak->callback( rusz_cb ); */
-	state_map.put("START", "0", Move::empty);
-	state_map.put("END", "k", Move::empty);
+	table_ = statesTablePtr(new statesTable(&state_map));
+	//state_map.put("START", "0", Move::empty);
+	//state_map.put("END", "k", Move::empty);
+	//state_map.put("END34343", "k", "z", move_left, "ziomek");
+	//table_=&table;
+	table_->height=170;
+	//table_->addRow();
+	//state_map.put("START33333", "0", Move::empty);
+	//state_map.put("END555", "k", Move::empty);
+	//table_->addRow();
 
-	table.height=170;
-	table.addRow();
-	//table.addRow("STAN0", "#", "1", "L", "STAN1");//przy 9 wlaczyc suwak
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-	//table.addRow("STAN1", "#", "0", "L", "STAN2");
-  popup = PopupPtr(new Popup(&state_map));
+	popup = PopupPtr(new Popup(&state_map));
 	end();
     show();
 }
@@ -66,7 +57,7 @@ Application::~Application( void)
 void Application::clir(Application *app)
 {
 	app->state_map.clear();
-
+	//table_->addRow();
 	
 }
 
@@ -93,13 +84,15 @@ void Application::save_machine(const std::string& path)
     } 
 	else
         std::cout << "Nieudane otwarcie pliku." << std::endl;
-
+	state_map.put("END34343", "k", "z", move_left, "ziomek");
+	table_->addRow();
 }
 
 void Application::open_machine( const std::string& path )
 {
+	//state_map.clear();
     std::ifstream plik(path);
-    state_type stateF, stateL, order;
+    std::string stateF, stateL, order;
     sym_type symF="0", symL="1";
     char dir='L';
     if( plik.is_open() )
@@ -138,13 +131,13 @@ void Application::open_machine( const std::string& path )
     }
 	else
         std::cout << "Nieudane otwarcie pliku." << std::endl;
+	//table_->addRow();
 }
 
 void Application::add_button(Fl_Widget* e, void*)
 {
     Fl_Button* btn = dynamic_cast<Fl_Button*>(e);
     Application* app = dynamic_cast<Application*>(btn->parent());
-	//app->table_.addRow("STAN0", "#", "1", "L", "STAN1");
+	//app->table_->addRow();
     app->popup->show();
-	
 }

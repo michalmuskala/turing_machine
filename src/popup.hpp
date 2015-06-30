@@ -11,7 +11,6 @@ public:
 	typedef std::unique_ptr<Fl_Box> BoxPtr;
 
     Popup(StateMap* state_map);
-
 	static void send_order_input(Fl_Widget*, void*);
 private:
     StateMap* state_map_;

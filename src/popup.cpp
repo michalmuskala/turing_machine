@@ -1,4 +1,5 @@
 #include "popup.hpp"
+#include <iostream>
 
 
 Fl_Input *inputBegState, *inputRSym, *inputWSym, *inputDir, *inputEndState;
@@ -61,7 +62,7 @@ Popup::Popup(StateMap* state_map): Fl_Window(300, 400, "Dodaj rozkaz"), state_ma
 void Popup::send_order_input(Fl_Widget* e, void*)
 {
 	Move anotherMove;
-	state_type BegState=inputBegState->value();
+	std::string BegState=inputBegState->value();
 	sym_type RSymbol=inputRSym->value();
 	anotherMove.sym=inputWSym->value();
 	anotherMove.state=inputEndState->value();
@@ -72,6 +73,14 @@ void Popup::send_order_input(Fl_Widget* e, void*)
 	Fl_Button* btn=dynamic_cast<Fl_Button*>(e);
 	Popup* pop = dynamic_cast<Popup*>(btn->parent());
 	pop->state_map_->put(BegState, RSymbol, anotherMove);
+	/*for (auto i = pop->state_map_->begin(); i != pop->state_map_->end(); ++i)
+	{
+		for (auto j = i->second.begin(); j != i->second.end(); ++j) {
+			std::cout << i->first << " " << j->first << " "
+			<< j->second.sym << " " << j->second.move << " "
+			<< j->second.state << std::endl;
+			}
+	}*/
 	pop->hide();
 }
 

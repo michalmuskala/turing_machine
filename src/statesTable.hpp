@@ -25,7 +25,6 @@ private:
 	
     StateMap* state_map_;
 
-
 };
 
 #endif
