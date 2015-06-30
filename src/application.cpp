@@ -23,19 +23,24 @@ Application::Application(int w, int h): Fl_Window(w, h, "Maszyna Turinga"),
 
 	add = ButtonPtr(new Fl_Button(5, 100, 50, 30, "Dodaj"));
 	add->callback(add_button);
-
+	
 	start = ButtonPtr(new Fl_Button(75, 100, 50, 30, "Start"));
-//	start->callback(open_machine);
-	statesTable table;
+	//start->callback();
+	statesTable table(&state_map);
 	/*Fl_Slider *suwak;
 	suwak = new Fl_Slider( w_-15, 170, 20, h_, "");
 	suwak->range( -5, 5 ); //zakres wartoœci
 	suwak->step( 0.1 ); //krok
 	suwak->value( 0 );
+	
+
 	suwak->callback( rusz_cb ); */
+	state_map.put("START", '0', Move::empty);
+	state_map.put("END", 'k', Move::empty);
 
 	table.height=170;
-	table.addRow("STAN0", "#", "1", "L", "STAN1");//przy 9 wlaczyc suwak
+	table.addRow();
+	//table.addRow("STAN0", "#", "1", "L", "STAN1");//przy 9 wlaczyc suwak
 	//table.addRow("STAN1", "#", "0", "L", "STAN2");
 	//table.addRow("STAN1", "#", "0", "L", "STAN2");
 	//table.addRow("STAN1", "#", "0", "L", "STAN2");
@@ -61,6 +66,8 @@ Application::~Application( void)
 void Application::clir(Application *app)
 {
 	app->state_map.clear();
+
+	
 }
 
 void Application::save_machine(const std::string& path)
@@ -121,7 +128,6 @@ void Application::open_machine( const std::string& path )
 					}			
 				}
 				stateL=symbol;
-				std::cout<<stateF<<symF<<symL<<dir<<stateL<<std::endl;
 				if(dir=='L')
 					state_map.put(stateF, symF, symL, move_left , stateL);
 				else 
@@ -137,5 +143,7 @@ void Application::add_button(Fl_Widget* e, void*)
 {
     Fl_Button* btn = dynamic_cast<Fl_Button*>(e);
     Application* app = dynamic_cast<Application*>(btn->parent());
+	//app->table_.addRow("STAN0", "#", "1", "L", "STAN1");
     app->popup->show();
+	
 }

@@ -28,24 +28,45 @@ void statesTable::addOrder(std::string order)
 	end_state.push_back(symbol);
 }
 
-void statesTable::addRow(char* begState, char* RSym, char* WSym, char* Dir, char* endState )
+void statesTable::addRow()
 {
 	Fl_Box *state_beg, *read_sym, *write_sym, *dir, *state_end;
-	state_beg = new Fl_Box(12,height+34, 125,35,begState);
-	state_beg->box(FL_BORDER_BOX);
 
-	read_sym = new Fl_Box(136,statesTable::height+34, 145,35,RSym);
-	read_sym->box(FL_BORDER_BOX);
-	write_sym = new Fl_Box(280,height+34, 125,35, WSym);
-	write_sym->box(FL_BORDER_BOX);
-	dir = new Fl_Box(404,height+34, 75,35, Dir);
-	dir->box(FL_BORDER_BOX);
-	state_end = new Fl_Box(478,height+34, 105,35,endState);
-	state_end->box(FL_BORDER_BOX);
-	height+=34;
+	char *znaki;
+	//const char* okej="z";
+	
+	for (auto i = state_map_->begin(); i != state_map_->end(); ++i)
+	{
+		for (auto j = i->second.begin(); j != i->second.end(); ++j)
+		{
+			state_beg = new Fl_Box(12,height+34, 125,35,i->first.c_str());
+			state_beg->box(FL_BORDER_BOX);
+			
+			//*znaki=j->first;
+			//znaki = new char(j->first);
+			//okej=znaki;
+
+			//read_sym = new Fl_Box(136,statesTable::height+34, 145,35, std::string(j->first).c_str());
+			std::cout<<j->first;
+			read_sym = new Fl_Box(136,statesTable::height+34, 145,35, &j->first);
+			//read_sym->box(FL_BORDER_BOX);
+			//write_sym = new Fl_Box(280,height+34, 125,35, j->second.sym);
+			//write_sym->box(FL_BORDER_BOX);
+			const char* conv="LEWO";
+			if(j->second.move)
+				conv="PRAWO";
+			dir = new Fl_Box(404,height+34, 75,35, conv);
+			dir->box(FL_BORDER_BOX);
+			state_end = new Fl_Box(478,height+34, 105,35,j->second.state.c_str());
+			state_end->box(FL_BORDER_BOX);
+			height+=34;
+		}
+	}
+
+	
+	
 }
-
-statesTable::statesTable()
+statesTable::statesTable(StateMap* state_map): state_map_(state_map)
 {
 	Fl_Box *state_beg, *read_sym, *write_sym, *dir, *state_end;
 	state_beg = new Fl_Box(12,170, 125,35,"Stan poczatkowy");

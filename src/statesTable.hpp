@@ -3,14 +3,16 @@
 
 #include <vector>
 #include <string>
+#include "state_map.hpp"
 
 class statesTable
 {
 public:
-	statesTable();
+	statesTable(StateMap* state_map);
 	
 	void addOrder(std::string order);
-	void addRow(char*,char*, char*, char*, char*);
+	void addRow();
+
 	int height;
 	
 private:
@@ -21,7 +23,9 @@ private:
 	std::vector<char> write;
 	std::vector<char> direction;
 	
-	
+    StateMap* state_map_;
+
+
 };
 
 #endif

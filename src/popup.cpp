@@ -9,8 +9,7 @@ Popup::Popup(StateMap* state_map): Fl_Window(300, 400, "Dodaj rozkaz"), state_ma
 	inputBegState->value("");
 	inputBegState->labelsize(11);
 	inputBegState->textsize(11);
-
-	  	
+  	
 	begText = new Fl_Box(10,50,280,50,"Stan, w jakim maszyna sie znajduje przed \nrozpoczeciem pracy (np.: 'STAN1').");
 	begText->labelsize(11);
 	

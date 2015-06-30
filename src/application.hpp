@@ -13,6 +13,7 @@
 #include "state_map.hpp"
 #include "popup.hpp"
 #include "menu.hpp"
+#include "statesTable.hpp"
 
 
 class Application: public Fl_Window{

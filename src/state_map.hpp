@@ -58,6 +58,7 @@ class StateMap {
 
   private:
     map_type map_;
+//	statesTable *table_;
 };
 
 #endif
