@@ -4,7 +4,7 @@
 
 Fl_Input *inputBegState, *inputRSym, *inputWSym, *inputDir, *inputEndState;
 Fl_Box *begText, *rSymText, *wSymText, *dirText, *endText;
-Popup::Popup(StateMap* state_map): Fl_Window(300, 400, "Dodaj rozkaz"), state_map_(state_map) {
+Popup::Popup(StateMap* state_map, statesTable* table): Fl_Window(300, 400, "Dodaj rozkaz"), state_map_(state_map), table_(table) {
 
 	inputBegState = new Fl_Input(110, 30, 180, 17, "Stan poczatkowy: ");
 	inputBegState->value("");
@@ -73,14 +73,8 @@ void Popup::send_order_input(Fl_Widget* e, void*)
 	Fl_Button* btn=dynamic_cast<Fl_Button*>(e);
 	Popup* pop = dynamic_cast<Popup*>(btn->parent());
 	pop->state_map_->put(BegState, RSymbol, anotherMove);
-	/*for (auto i = pop->state_map_->begin(); i != pop->state_map_->end(); ++i)
-	{
-		for (auto j = i->second.begin(); j != i->second.end(); ++j) {
-			std::cout << i->first << " " << j->first << " "
-			<< j->second.sym << " " << j->second.move << " "
-			<< j->second.state << std::endl;
-			}
-	}*/
+	pop->table_->rows(pop->state_map_->length());
 	pop->hide();
+	
 }
 

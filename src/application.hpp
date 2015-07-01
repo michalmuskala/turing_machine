@@ -21,7 +21,7 @@ public:
     typedef std::unique_ptr<Fl_Box> BoxPtr;
     typedef std::unique_ptr<Fl_Button> ButtonPtr;
     typedef std::unique_ptr<Popup> PopupPtr;
-	typedef std::unique_ptr<statesTable> statesTablePtr;
+	//typedef std::unique_ptr<statesTable> statesTablePtr;
     typedef std::unique_ptr<Menu> MenuPtr;
 
     Application(int w, int h);
@@ -33,12 +33,14 @@ public:
 	void open_machine( const std::string& path);
 
 	static void clir(Application*);
-
+	
+	
 private:
     int w_, h_;
-    StateMap state_map;
-	statesTablePtr table_;
+    
+	StateMap state_map;
     MenuPtr menu_;
+	statesTable table_;
 
     BoxPtr box;
     BoxPtr tape;

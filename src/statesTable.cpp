@@ -2,34 +2,11 @@
 #include <iostream>
 #include <FL/Fl_Box.H>
 
-void statesTable::addOrder(std::string order)
-{
-	int whichField=-1;
-	std::string symbol;
-	int i=0;
-	for(;i<order.size();i++)
-	{
-		if(order[i]!=' ')
-			symbol+=order[i];
-		else
-		{
-			whichField++;
-			switch(whichField)
-			{
-				case 0: begin_state.push_back(symbol); break; 
-				case 1: read.push_back(symbol[0]); break;
-				case 2: write.push_back(symbol[0]);  break;
-				case 3: direction.push_back(symbol[0]);  break;
-				case 4: break;
-			}
-			symbol="";
-		}			
-	}
-	end_state.push_back(symbol);
-}
+
 void statesTable::addRow()
 {
-	height=170;
+
+	int height=170;
 	Fl_Box *state_beg, *read_sym, *write_sym, *dir, *state_end;
 	for (auto i = state_map_->begin(); i != state_map_->end(); ++i)
 	{
@@ -59,7 +36,7 @@ void statesTable::addRow()
 	}
 }
 
-
+/*
 statesTable::statesTable(StateMap* state_map): state_map_(state_map)
 {
 	Fl_Box *state_beg, *read_sym, *write_sym, *dir, *state_end;
@@ -74,4 +51,94 @@ statesTable::statesTable(StateMap* state_map): state_map_(state_map)
 	state_end = new Fl_Box(478,170, 105,35,"Stan koncowy");
 	state_end->box(FL_BORDER_BOX);
 	height=170;
+}*/
+
+
+	const char* text="Stan poczatkowy";
+	static int which_row=0;
+void statesTable::draw_cell(TableContext context, 
+			  int R, int C, int X, int Y, int W, int H)
+{
+    static char s[40];
+
+	//rows_();
+	//rows(5);
+   sprintf(s, "%s", text);		// text for each cell
+
+    switch ( context )
+    {
+	case CONTEXT_STARTPAGE:
+	    //fl_font(FL_TIMES, 12);
+	    return;
+
+	case CONTEXT_COL_HEADER:
+	    fl_push_clip(X, Y, W, H);
+	    {
+			fl_draw_box(FL_THIN_UP_BOX, X, Y, W, H, color());
+			fl_color(FL_BLACK);
+			fl_draw(s, X, Y,W, H, FL_ALIGN_CENTER);
+			
+			//if(C==0)
+				//siema="Stan poczatkowy";
+			//else
+				if(C==0)
+				text="Przeczytany symbol";
+			else if(C==1)
+				text="Wpisany symbol";
+			else if(C==2)
+				text="Kierunek";
+			else if(C==3)
+				text="Stan koncowy";
+			sprintf(s, "%s", text);	
+		}
+	    fl_pop_clip();
+	    return;
+
+	case CONTEXT_CELL:
+	{
+		//sprintf(s, "%d", R+C);
+	    //fl_push_clip(X, Y, W, H);
+	    {
+	        // BG COLOR
+		fl_color( FL_BACKGROUND_COLOR);
+		fl_rectf(X, Y, W, H);
+
+		// TEXT
+		fl_color(FL_BLACK);
+		fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
+
+		// BORDER
+		fl_color(FL_BLACK); 
+		fl_rect(X, Y, W, H);
+		fl_push_clip(X, Y, W, H);
+		for (auto i = state_map_->begin(); i != state_map_->end(); ++i)
+		{
+			for (auto j = i->second.begin(); j != i->second.end(); ++j)
+			{
+				text=i->first.c_str();
+				if(C==0)
+					text=j->first.c_str();
+				
+				else if(C==1)
+					text=j->second.sym.c_str();
+				else if(C==2)
+				{
+					text="LEWO";
+					if(j->second.move)
+						text="PRAWO";		
+				}
+				else if(C==3)
+					text=j->second.state.c_str();
+			
+				 sprintf(s, "%s", text);
+			}
+		}	
+	    }
+	    fl_pop_clip();
+	    return;
+	}
+
+	default:
+	    return;
+    }
 }

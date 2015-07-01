@@ -44,3 +44,7 @@ void StateMap::clear()
 {
 	map_.clear();
 }
+int StateMap::length()
+{
+	return map_.size();
+}

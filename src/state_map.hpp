@@ -50,6 +50,7 @@ class StateMap {
     void put(const state_type& state, const sym_type sym, const Move& move);
     const Move& get(const state_type& state, const sym_type sym) const;
 	void clear();
+	int length();
 
     inline const_iterator begin() const { return map_.begin(); }
     inline const_iterator end() const { return map_.end(); }
