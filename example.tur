@@ -1,0 +1,5 @@
+START # 0 P S1
+S1    # 1 P S2
+S2    # 1 L S3
+S3    1 k L S4
+S4    1 q L HALT

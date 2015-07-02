@@ -1,17 +1,10 @@
 #include "controller.hpp"
 
+#include <FL/Fl.H>
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
-#ifdef _WIN32
-// WINDOWS
-#include <windows.h>
-#define usleep(v) Sleep(v/1000)
-#else
-// UNIX
-#include <unistd.h>                            // usleep
-#endif
 
 Controller::Controller(): app_(this), state_map_(), machine_(state_map_) {
     state_map_.put("START", "0", Move::empty);
@@ -123,11 +116,13 @@ bool Controller::add_entry(const std::string& command) {
 void Controller::start() {
     machine_.initialize();
 
+    app_.refresh_tape(start_state, "", 0);
+
     while (machine_.tick()) {
-        usleep(5000);
-        std::cout << machine_.state() << std::endl;
+        Fl::wait(1);
         app_.refresh_tape(machine_.state(), machine_.tape(), machine_.pos());
     }
+    Fl::wait(1);
 
-    app_.refresh_tape("END", "", 0);
+    app_.refresh_tape(machine_.state(), machine_.tape(), machine_.pos());
 }

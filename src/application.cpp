@@ -38,6 +38,7 @@ void Application::refresh_state(const StateMap& state_map) {
 void Application::refresh_tape(const std::string& state, const std::string& strip, size_t pos) {
     state_->label(state.c_str());
     tape_->refresh(strip, pos);
+    redraw();
 }
 
 void Application::start_button(Fl_Widget*, void* ctrl) {

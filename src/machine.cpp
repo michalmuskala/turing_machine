@@ -9,6 +9,7 @@ Machine::Machine(const StateMap& state_map): state_map_(state_map) {}
 void Machine::initialize(const std::string& strip) {
     current_ = 0;
     state_ = start_state;
+    strip_.clear();
     std::copy(strip.begin(), strip.end(), strip_.begin());
 
     if (strip_.empty()) {
