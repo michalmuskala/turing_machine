@@ -10,16 +10,12 @@ const StatesTable::row_type StatesTable::headers =
   {"STAN", "SYMBOL", "NOWY SYMBOL", "KIERUNEK", "NOWY STAN"};
 
 StatesTable::StatesTable(Controller* ctrl):
-    Fl_Table_Row(12, 170, 572, 500, nullptr), ctrl_(ctrl) {
+    Fl_Table_Row(12, 170, 572, 620, nullptr), ctrl_(ctrl) {
 
-    // row_height_all(40);
-    // col_width_all(200);
-    // row_header_width(800);
     cols(headers.size());
     col_header(1);
     col_header_height(50);
     col_width_all(114);
-    // col_resize(4);
 
     end();
 }
@@ -83,6 +79,8 @@ void StatesTable::draw_cell(TableContext context, int R, int C, int X, int Y, in
         fl_draw(table_[R][C].c_str(), X, Y, W, H, FL_ALIGN_CENTER);
 
         fl_pop_clip();
+        break;
+    default:
         break;
     }
 }

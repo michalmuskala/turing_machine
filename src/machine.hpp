@@ -9,16 +9,23 @@
 
 class Machine {
   public:
-    typedef std::function<void(const state_type&, const sym_type)> callback_type;
+    typedef std::deque<sym_type> strip_type;
+    typedef size_t size_type;
 
     Machine(const StateMap& state_map);
-    bool parse(std::istream& in);
-    const state_type run(const std::string& strip = "");
-    void register_callback(callback_type& callback);
+    void initialize(const std::string& strip = "");
+    bool tick();
+    inline const state_type& state() const { return state_; }
+    inline sym_type sym() const { return strip_[current_]; }
+
+    std::string tape();
+    inline size_t pos() { return current_; }
 
   private:
-    StateMap state_map_;
-    callback_type& callback_;
+    const StateMap& state_map_;
+    size_type current_;
+    state_type state_;
+    strip_type strip_;
 };
 
 #endif

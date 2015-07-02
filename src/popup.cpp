@@ -49,7 +49,6 @@ Popup::Popup(Controller* ctrl):
     state2_text_ = BoxPtr(new Fl_Box(10,305,280,50,"Stan maszyny, w jakim sie znajdzie \npo wykonaniu rozkazu (np.: 'STAN2')."));
     state2_text_->labelsize(11);
 
-
     btn_ = ButtonPtr(new Fl_Button(230, 350, 50, 30, "Dodaj"));
     btn_->callback(add_entry, ctrl_);
 

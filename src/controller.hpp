@@ -3,6 +3,7 @@
 
 #include "application.hpp"
 #include "state_map.hpp"
+#include "machine.hpp"
 
 class Controller {
 public:
@@ -13,10 +14,12 @@ public:
     void new_machine();
     void end_program();
     bool add_entry(const std::string& command);
+    void start();
 
 private:
     Application app_;
     StateMap state_map_;
+    Machine machine_;
 };
 
 #endif

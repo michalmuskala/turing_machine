@@ -4,13 +4,22 @@
 #include <iostream>
 #include <sstream>
 
-Controller::Controller(): app_(this), state_map_() {
+#ifdef _WIN32
+// WINDOWS
+#include <windows.h>
+#define usleep(v) Sleep(v/1000)
+#else
+// UNIX
+#include <unistd.h>                            // usleep
+#endif
+
+Controller::Controller(): app_(this), state_map_(), machine_(state_map_) {
     state_map_.put("START", "0", Move::empty);
     state_map_.put("START2323232", "0", Move::empty);
     state_map_.put("START33333", "0", Move::empty);
 
-    app_.refresh(state_map_);
-    app_.redraw();
+    app_.refresh_state(state_map_);
+    app_.refresh_tape("", "", 0);
 }
 
 void Controller::save_machine(const std::string& path) {
@@ -24,9 +33,14 @@ void Controller::save_machine(const std::string& path) {
     if(plik.is_open()) {
         for (auto i = state_map_.begin(); i != state_map_.end(); ++i) {
             for (auto j = i->second.begin(); j != i->second.end(); ++j) {
-                plik << i->first << 
+                std::string move;
+                switch(j->second.move) {
+                case move_left: move = "L"; break;
+                case move_right: move = "P"; break;
+                }
+                plik << i->first <<
                     " " << j->first << " "
-                     << j->second.sym << " " << j->second.move << " "
+                     << j->second.sym << " " << move << " "
                      << j->second.state << std::endl;
             }
         }
@@ -55,6 +69,7 @@ void Controller::load_machine(const std::string& path) {
 
 void Controller::new_machine() {
     state_map_.clear();
+    app_.refresh_state(state_map_);
 }
 
 void Controller::end_program() {
@@ -76,13 +91,12 @@ bool Controller::add_entry(const std::string& command) {
     line_stream >> new_state;
 
     if (!line_stream.good()) {
-        std::cerr << "Stream was empty" << std::endl;
         return false;
     }
 
     if (raw_move == 'L' || raw_move == 'l') {
         move = move_left;
-    } else if (raw_move == 'R' || raw_move == 'r') {
+    } else if (raw_move == 'R' || raw_move == 'r' || raw_move == 'P' || raw_move == 'p') {
         move = move_right;
     } else {
         std::cerr << "Invalid move symbol" << std::endl;
@@ -100,7 +114,20 @@ bool Controller::add_entry(const std::string& command) {
 
     state_map_.put(state, sym, move_struct);
 
-    app_.refresh(state_map_);
+    app_.refresh_state(state_map_);
+    app_.refresh_tape("", "", 0);
 
     return true;
+}
+
+void Controller::start() {
+    machine_.initialize();
+
+    while (machine_.tick()) {
+        usleep(5000);
+        std::cout << machine_.state() << std::endl;
+        app_.refresh_tape(machine_.state(), machine_.tape(), machine_.pos());
+    }
+
+    app_.refresh_tape("END", "", 0);
 }
