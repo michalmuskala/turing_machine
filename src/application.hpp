@@ -1,46 +1,38 @@
 #ifndef TURING_MACHINE_APPLICATION
 #define TURING_MACHINE_APPLICATION
 
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_File_Chooser.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_BMP_Image.H>
-#include <FL/Fl_Box.H>
 #include <memory>
-#include <FL/Fl_Slider.H>
 #include <string>
-#include "state_map.hpp"
+
+#include <FL/Fl_Window.H>
+
 #include "popup.hpp"
 #include "menu.hpp"
-#include "statesTable.hpp"
+#include "states_table.hpp"
+#include "state_map.hpp"
 
+class Controller;
 
-class Application: public Fl_Window{
+class Application : public Fl_Window {
 public:
     typedef std::unique_ptr<Fl_Box> BoxPtr;
     typedef std::unique_ptr<Fl_Button> ButtonPtr;
     typedef std::unique_ptr<Popup> PopupPtr;
-	//typedef std::unique_ptr<statesTable> statesTablePtr;
+    typedef std::unique_ptr<StatesTable> TablePtr;
     typedef std::unique_ptr<Menu> MenuPtr;
 
-    Application(int w, int h);
-    ~Application( void );
+    Application(Controller* ctrl);
 
-	static void add_button(Fl_Widget*, void*);
+    void refresh(const StateMap& state_map);
 
-    void save_machine( const std::string& path);
-	void open_machine( const std::string& path);
+    static void add_button(Fl_Widget*, void*);
 
-	static void clir(Application*);
-	
-	
 private:
-    int w_, h_;
-    
-	StateMap state_map;
+    Controller* ctrl_;
+
     MenuPtr menu_;
-	statesTable table_;
+    TablePtr table_;
+    PopupPtr popup_;
 
     BoxPtr box;
     BoxPtr tape;
@@ -53,9 +45,7 @@ private:
     BoxPtr read_sym;
     BoxPtr write_sym;
     BoxPtr dir;
-    BoxPtr state_end;	
-
-    PopupPtr popup;
+    BoxPtr state_end;
 };
 
 

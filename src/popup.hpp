@@ -1,20 +1,40 @@
-#include "state_map.hpp"
+#ifndef TURING_MACHINE_POPUP
+#define TURING_MACHINE_POPUP
+
+#include <memory>
+
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Button.H>
-#include "statesTable.hpp"
-#include <memory>
 
-class Application;
+class Controller;
 
-class Popup: public Fl_Window {
+class Popup : public Fl_Window {
 public:
-	typedef std::unique_ptr<Fl_Box> BoxPtr;
-    Popup(StateMap* state_map, statesTable* table);
-	static void send_order_input(Fl_Widget*, void*);
+    typedef std::unique_ptr<Fl_Box> BoxPtr;
+    typedef std::unique_ptr<Fl_Input> InputPtr;
+    typedef std::unique_ptr<Fl_Button> ButtonPtr;
+
+    Popup(Controller* ctrl);
+
+    static void add_entry(Fl_Widget*, void*);
 private:
-    StateMap* state_map_;
-	statesTable* table_;
-	
+    Controller* ctrl_;
+
+    InputPtr state1_;
+    InputPtr sym1_;
+    InputPtr sym2_;
+    InputPtr dir_;
+    InputPtr state2_;
+
+    BoxPtr state1_text_;
+    BoxPtr sym1_text_;
+    BoxPtr sym2_text_;
+    BoxPtr dir_text_;
+    BoxPtr state2_text_;
+
+    ButtonPtr btn_;
 };
+
+#endif
